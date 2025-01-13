@@ -1,9 +1,17 @@
+import BookingForm from "../../components/BookingForm";
+
 const Home = () => {
   return (
+   <>
     <div
       className="text-white relative  flex items-center"
       style={{
-        backgroundImage: `linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.2)), url("https://www.qatarairways.com/content/dam/images/renditions/horizontal-1/campaigns/global/grsp-2025/dream-destinations/hn-dream-destination-city.jpg")`,
+        backgroundImage: `linear-gradient(
+            to right, 
+            rgba(0, 0, 0, 0.7), 
+            rgba(0, 0, 0, 0.3) 50%, 
+            rgba(0, 0, 0, 0.1) 80%
+          ), url("https://www.qatarairways.com/content/dam/images/renditions/horizontal-1/campaigns/global/grsp-2025/dream-destinations/hn-dream-destination-city.jpg")`,
 
         backgroundSize: "cover",
         backgroundRepeat: "no-repeat",
@@ -23,6 +31,11 @@ const Home = () => {
         </button>
       </div>
     </div>
+
+   <div className="mb-20">
+   <BookingForm />
+   </div>
+   </>
   );
 };
 

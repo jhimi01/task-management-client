@@ -7,6 +7,8 @@ import {
 import "./index.css";
 import Main from './layouts/Main';
 import Home from './pages/Home/Home';
+import SingUp from './pages/SignUp/SingUp';
+import Login from './pages/Login/Login';
 
 const router = createBrowserRouter([
   {
@@ -16,6 +18,14 @@ const router = createBrowserRouter([
       {
         path: "/",
         element: <Home />
+      },
+      {
+        path: "/signup",
+        element: <SingUp />
+      },
+      {
+        path: "/login",
+        element: <Login />
       }
     ]
   },

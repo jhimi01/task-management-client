@@ -1,28 +1,44 @@
 // import { CircleUserRound } from "lucide";
 import { CircleUserRound, Info, Search, X } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navbar = () => {
+  const { pathname } = useLocation();
+  console.log(pathname);
   return (
-    <nav className="absolute z-10 w-full">
+    <nav
+      className={`${
+        pathname === "/"
+          ? " absolute z-10 text-white"
+          : "bg-white text-black"
+      } w-full`}
+    >
+      {/* <nav className="absolute z-10 w-full"> */}
       {/* ads shows */}
-      <div className="bg-white w-full">
+      <div
+        style={{ boxShadow: "20px 10px 15px rgba(0, 0, 0, 0.10)" }}
+        className={`${pathname === "/" ? "block" : "hidden"} bg-white w-full`}
+      >
         <div className="wrapper flex items-center justify-between">
           <div className="flex items-center gap-3 ">
-            <Info />
-            <h3 className="capitalize text-slate-600">Flight operation update: Resumption flight to lebanon</h3>
+            <Info className="text-blue-400" />
+            <h3 className="capitalize text-slate-600">
+              Flight operation update: Resumption flight to lebanon
+            </h3>
           </div>
           <div>
             <X className="text-slate-500" />
           </div>
         </div>
       </div>
-      <div className="wrapper text-white">
+      <div className="wrapper shadow-inner">
         {/* <div className="bg-white w-full py-4">Essential Heath</div> */}
         <div className="flex justify-between items-center ">
           {/* logo */}
           <div className="text-2xl font-bold">
-            <h1>logoooo</h1>
+            <Link to="/">
+              <h1>logoooo</h1>
+            </Link>
           </div>
           {/* main nav links */}
           <div className="flex items-center text-xl">
