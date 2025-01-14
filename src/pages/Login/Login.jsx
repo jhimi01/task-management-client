@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import { Link } from "react-router";
 
 const Login = () => {
   const {
@@ -11,7 +12,7 @@ const Login = () => {
   return (
     <div className="bg-gray-100 h-screen">
       <div className="pt-20">
-        <div className="bg-white w-11/12 md:w-[40%] mx-auto space-y-4 rounded-sm px-6 py-10">
+        <div className="bg-white w-11/12 md:w-[40%] mx-auto space-y-4 rounded-sm px-6 pt-10 pb-5">
           <h3 className="text-3xl">Log in to your account</h3>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="">
@@ -57,19 +58,24 @@ const Login = () => {
             </button>
             <div className="flex items-center gap-1">
               <div className="h-[1px] w-full bg-slate-600"></div>
-               or 
+              or
               <div className="h-[1px] w-full bg-slate-600"></div>
             </div>
           </form>
-            <div>
-              <button className="text-center bg-slate-200 hover:bg-slate-300 w-full rounded-full">
+          <div>
+            <button className="text-center bg-slate-200 hover:bg-slate-300 w-full rounded-full">
               <img
-                    src="https://storage.googleapis.com/libraries-lib-production/images/GoogleLogo-canvas-404-300px.original.png"
-                    alt="google icon"
-                    className="h-14 w-14 mx-auto"
-                  />
-              </button>
-            </div>
+                src="https://storage.googleapis.com/libraries-lib-production/images/GoogleLogo-canvas-404-300px.original.png"
+                alt="google icon"
+                className="h-14 w-14 mx-auto"
+              />
+            </button>
+          </div>
+          <div className="text-primary text-lg mt-5 text-center cursor-pointer">
+            <Link to="/signup">
+              Are you new here? <span className="underline">Sign up</span>
+            </Link>
+          </div>
         </div>
       </div>
     </div>

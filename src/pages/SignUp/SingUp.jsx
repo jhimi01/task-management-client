@@ -1,5 +1,8 @@
 import { useForm } from "react-hook-form";
-import axios from 'axios';
+import axios from "axios";
+import { Link, useLocation, useNavigate } from "react-router-dom";
+import { useCookie } from "../../hooks/useCookie";
+// import { useEffect } from "react";
 
 const SignUp = () => {
   const {
@@ -8,17 +11,50 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = async(data) => {
-    try{
-      const response = await axios.post('http://localhost:5000/api/signup', data)
-      alert('User registered successfully');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const from = location.state?.from?.pathname || "/";
+
+  const { setCookie } = useCookie({ key: "Token", days: 7 });
+
+  const onSubmit = async (data) => {
+    if (data.password !== data.retypePassword) {
+      alert("privide correct password");
+      return;
+    }
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/signup",
+        data
+      );
+      const token = response.data.token;
+      navigate(from, { replace: true }); // Extract the token from the response
+      if (token) {
+        setCookie(token); // Set the token in the cookie
+        alert("User registered successfully and token stored in cookie");
+      } else {
+        alert("Failed to retrieve token");
+      }
       console.log(response.data);
-    } catch(e){
+    } catch (e) {
       console.error("Error:", e);
       return;
     }
-    console.log(data)
+    console.log(data);
   };
+
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:5000/users");
+  //       console.log("These are all users:", response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching users:", error);
+  //     }
+  //   };
+
+  //   fetchUsers();
+  // }, []);
 
   return (
     <div className="bg-gray-100">
@@ -262,6 +298,7 @@ const SignUp = () => {
               </div>
             </div>
           </form>
+          <div className="text-primary text-lg mt-5 text-center cursor-pointer"><Link to="/login">Already have an account? <span className="underline">Login</span></Link></div>
         </div>
       </div>
     </div>

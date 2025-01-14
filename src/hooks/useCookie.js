@@ -1,5 +1,5 @@
 import { useState } from "react";
-import Cookies, { CookieSetOptions } from "universal-cookie";
+import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 
@@ -11,7 +11,7 @@ export const useCookie = (props) => {
   expirationDate.setTime(expirationDate.getTime() + days * 24 * 60 * 60 * 1000);
 
   const setCookie = (value) => {
-    cookies.set(key, value, CookieSetOptions);
+    cookies.set(key, value, { path: "/", expires: expirationDate });
     setCookieValue(value);
   };
 
