@@ -15,8 +15,8 @@ const SignUp = () => {
   const [otp, setOtp] = useState("");
   const [email, setEmail] = useState(""); // Store email here for OTP verification
 
-  console.log(otp, showOTP)
-  console.log(otp)
+  console.log(otp, showOTP);
+  console.log(otp);
 
   const navigate = useNavigate();
   // const location = useLocation();
@@ -60,7 +60,7 @@ const SignUp = () => {
       //   alert("Failed to retrieve token");
       // }
       setEmail(data.email);
-    
+
       console.log("this is a data", response); // Log the full response for debugging
     } catch (error) {
       alert("An error occurred", error.message);
@@ -78,10 +78,10 @@ const SignUp = () => {
         "http://localhost:5000/api/verify-otp",
         { email, otp }
       );
-      console.log("otttttttttp", response)
+      console.log("otttttttttp", response);
       if (response.status === 200) {
         alert("User verified successfully");
-      navigate("/login");
+        navigate("/login");
         // Redirect or show the next page
       }
     } catch (error) {
@@ -224,11 +224,15 @@ const SignUp = () => {
                 </div>
                 <div className="md:w-[70%] ml-auto">
                   <div className="space-y-2">
-                    <input
-                      {...register("title", { required: "Title is required" })}
-                      placeholder="Mr. , Ms."
-                      className="border-slate-400 focus:outline-none border p-2 w-full"
-                    />
+                    <select {...register("title")} className="border-slate-400 focus:outline-none border p-2 w-full">
+                      <option value="">Select...</option>
+                      <option value="Mr">Mr</option>
+                      <option value="Miss">Miss</option>
+                      <option value="Ms">Ms</option>
+                      <option value="Mrs">Mrs</option>
+                      <option value="Dr">Dr</option>
+                      <option value="Professor">Professor</option>
+                    </select>
                     {errors.title && (
                       <p className="text-red-500">{errors.title.message}</p>
                     )}

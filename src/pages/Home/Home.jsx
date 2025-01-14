@@ -1,40 +1,42 @@
 // import { useState } from "react";
+import { useEffect, useState } from "react";
 import BookingForm from "../../components/BookingForm";
+import axios from "axios";
 
 const Home = () => {
+  const [data, setData] = useState();
+  useEffect(() => {
+    const fetchUsers = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/users");
+        console.log("These are all users:", response.data);
+        setData(response.data);
+      } catch (error) {
+        console.error("Error fetching users:", error);
+      }
+    };
 
-
-
-
-
-
-
-
-
-    // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:5000/users");
-  //       console.log("These are all users:", response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching users:", error);
-  //     }
-  //   };
-
-  //   fetchUsers();
-  // }, []);
+    fetchUsers();
+  }, []);
 
   return (
     <>
       <div
-        className="text-white relative  flex items-center"
+        className="text-white relative  flex items-center pt-6"
         style={{
           backgroundImage: `linear-gradient(
             to right, 
             rgba(0, 0, 0, 0.7), 
-            rgba(0, 0, 0, 0.3) 50%, 
-            rgba(0, 0, 0, 0.1) 80%
-          ), url("https://www.qatarairways.com/content/dam/images/renditions/horizontal-1/campaigns/global/grsp-2025/dream-destinations/hn-dream-destination-city.jpg")`,
+            rgba(0, 0, 0, 0.3) 30%, 
+            rgba(0, 0, 0, 0.1) 50%
+          ),
+          linear-gradient(
+              to bottom, 
+              rgba(0, 0, 0, 0.8), 
+              rgba(0, 0, 0, 0.4) 20%, 
+              rgba(0, 0, 0, 0.1) 25%
+            ),
+          url("https://www.qatarairways.com/content/dam/images/renditions/horizontal-1/campaigns/global/grsp-2025/dream-destinations/hn-dream-destination-city.jpg")`,
 
           backgroundSize: "cover",
           backgroundRepeat: "no-repeat",
@@ -58,7 +60,19 @@ const Home = () => {
       <div className="mb-20">
         <BookingForm />
       </div>
-  
+
+      {/* all api */}
+      <div className="wrapper my-10">
+        {data?.map((item, index) => {
+          return (
+            <div key={index}>
+              <h2 className="text-2xl ">users details</h2>
+              <h3>title: {item?.title}</h3>
+              <p>email: {item?.email}</p>
+            </div>
+          );
+        })}
+      </div>
     </>
   );
 };

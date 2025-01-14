@@ -1,9 +1,19 @@
 import { CircleUserRound, Info, Search, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+// import { useCookie } from "../../hooks/useCookie";
+// import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const { pathname } = useLocation();
   console.log(pathname);
+  // const { getCookie, removeCookie } = useCookie({ key: "Token", days: 7 });
+  // const token = getCookie();
+  // const handleLogout = () => {
+  //   removeCookie(); 
+  //   // setCookie(" ")
+  //   console.log("Token removed");
+  // };
+
   return (
     <nav
       className={`${
@@ -66,9 +76,22 @@ const Navbar = () => {
             {/* login/server */}
             <div className="flex gap-2 items-center">
               <CircleUserRound />
-              <Link to="/login">Log in</Link>
-              <span>|</span>
-              <Link to="/signup">Sign up</Link>
+              {/* {token ? (
+                <div>
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-2"
+                  >
+                    Logout <LogOut />
+                  </button>
+                </div> */}
+              {/* // ) : ( */}
+                <div className="flex gap-2">
+                  <Link to="/login">Log in</Link>
+                  <span>|</span>
+                  <Link to="/signup">Sign up</Link>
+                </div>
+              {/* // )} */}
             </div>
           </div>
         </div>
