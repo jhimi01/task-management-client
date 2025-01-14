@@ -55,7 +55,21 @@ const Login = () => {
             <button className="bg-primary text-white font-semibold text-lg rounded-full w-full py-3 hover:bg-[#75244b]">
               Log In
             </button>
+            <div className="flex items-center gap-1">
+              <div className="h-[1px] w-full bg-slate-600"></div>
+               or 
+              <div className="h-[1px] w-full bg-slate-600"></div>
+            </div>
           </form>
+            <div>
+              <button className="text-center bg-slate-200 hover:bg-slate-300 w-full rounded-full">
+              <img
+                    src="https://storage.googleapis.com/libraries-lib-production/images/GoogleLogo-canvas-404-300px.original.png"
+                    alt="google icon"
+                    className="h-14 w-14 mx-auto"
+                  />
+              </button>
+            </div>
         </div>
       </div>
     </div>

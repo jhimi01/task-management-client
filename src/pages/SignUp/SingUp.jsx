@@ -1,4 +1,5 @@
 import { useForm } from "react-hook-form";
+import axios from 'axios';
 
 const SignUp = () => {
   const {
@@ -7,7 +8,17 @@ const SignUp = () => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const onSubmit = async(data) => {
+    try{
+      const response = await axios.post('http://localhost:5000/api/signup', data)
+      alert('User registered successfully');
+      console.log(response.data);
+    } catch(e){
+      console.error("Error:", e);
+      return;
+    }
+    console.log(data)
+  };
 
   return (
     <div className="bg-gray-100">
