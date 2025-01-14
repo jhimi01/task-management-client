@@ -1,5 +1,7 @@
 import { useForm } from "react-hook-form";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router-dom";  // Use useNavigate for redirection
+import axios from "axios";  // Import axios for making the API request
+import { useCookie } from "../../hooks/useCookie";
 
 const Login = () => {
   const {
@@ -7,8 +9,43 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const { setCookie } = useCookie({ key: "Token", days: 7 });
+  
+  const navigate = useNavigate();  // For navigation after login success
+  
+  const onSubmit = async (data) => {
+    try {
+      // Send login request to the backend
+      const response = await axios.post("http://localhost:5000/api/login", {
+        email: data.email,
+        password: data.password,
+      });
+      
+      // Check if the response is successful
+      if (response.status === 200) {
+        // Store the JWT token in localStorage or cookies (optional)
+        const token = response.data.token;
+        if (token) {
+          setCookie(token); // Set the token in the cookie
+          alert("loggged in successfully and token stored in cookie");
+        } else {
+          alert("Failed to retrieve token");
+        }
 
-  const onSubmit = (data) => console.log(data);
+        // Redirect the user to a protected route (for example, the dashboard)
+        navigate("/");  // Replace with the actual route you want to redirect to
+      }
+    } catch (error) {
+      // Handle any errors from the API
+      if (error.response) {
+        // Server responded with an error
+        alert(error.response.data.error || "Login failed");
+      } else {
+        // Something else went wrong
+        alert("Something went wrong. Please try again later.");
+      }
+    }
+  };
   return (
     <div className="bg-gray-100 h-screen">
       <div className="pt-20">

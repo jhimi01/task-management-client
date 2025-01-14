@@ -1,4 +1,3 @@
-// import { CircleUserRound } from "lucide";
 import { CircleUserRound, Info, Search, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 
@@ -8,10 +7,8 @@ const Navbar = () => {
   return (
     <nav
       className={`${
-        pathname === "/"
-          ? " absolute z-10 text-white"
-          : "bg-white text-black"
-      } w-full`}
+        pathname === "/" ? " absolute z-10 text-white" : "bg-white text-black"
+      } w-full `}
     >
       {/* <nav className="absolute z-10 w-full"> */}
       {/* ads shows */}
