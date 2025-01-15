@@ -1,9 +1,8 @@
 import { useForm } from "react-hook-form";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
-// import { useCookie } from "../../hooks/useCookie";
 import { useState } from "react";
-import { Eye, EyeClosed, Loader } from 'lucide-react';
+import { Eye, EyeClosed, Loader } from "lucide-react";
 
 const SignUp = () => {
   const {
@@ -14,20 +13,18 @@ const SignUp = () => {
 
   const [showOTP, setShowOTP] = useState(false);
   const [otp, setOtp] = useState("");
-  const [email, setEmail] = useState(""); // Store email here for OTP verification
-  const [loading, setLoading] = useState(false); // Store email here for OTP verification
-  const [showPass, setShowPass] = useState(true); // Store email here for OTP verification
-
-  console.log(otp, showOTP);
-  console.log(otp);
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(true);
 
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    setLoading(true)
+    setLoading(true);
     const newUser = {
       email: data.email,
       password: data.password,
+      nid: data.nid,
       countryCode: data.countryCode,
       mobileNumber: data.mobileNumber,
       gender: data.gender,
@@ -38,6 +35,7 @@ const SignUp = () => {
       country: data.country,
     };
     if (data.password !== data.retypePassword) {
+      setLoading(false);
       alert("Provide correct password");
       return;
     }
@@ -49,7 +47,7 @@ const SignUp = () => {
       );
       console.log("this is a response data", response.data); // Check the structure of response data
       if (response.status === 200) {
-        setLoading(false)
+        setLoading(false);
         alert("OTP sent to your email");
         setShowOTP(true); // Show OTP input form
       }
@@ -66,7 +64,7 @@ const SignUp = () => {
   };
 
   const handleVerifyOTP = async (e) => {
-    setLoading(true)
+    setLoading(true);
     e.preventDefault(); // Prevent default form submission
     try {
       const response = await axios.post(
@@ -75,13 +73,13 @@ const SignUp = () => {
       );
       console.log("otttttttttp", response);
       if (response.status === 200) {
-        setLoading(false)
+        setLoading(false);
         alert("User verified successfully");
         navigate("/login");
         // Redirect or show the next page
       }
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       console.log(error);
       alert("Invalid or expired OTP");
     }
@@ -139,21 +137,28 @@ const SignUp = () => {
 
                     <div className="flex w-full gap-5">
                       <div className="w-full">
-                      <div className="relative">
-                      <input
-                          {...register("password", {
-                            required: "Password is required",
-                            minLength: {
-                              value: 6,
-                              message: "Password must be at least 6 characters",
-                            },
-                          })}
-                          type={showPass ?"password" : "text"}
-                          placeholder="Password"
-                          className="border-slate-400 focus:outline-none border p-2 w-full"
-                        />
-                        <button type="button" className="absolute top-2 right-2" onClick={()=>setShowPass(!showPass)}>{showPass ?  <EyeClosed /> : <Eye />}</button>
-                      </div>                       
+                        <div className="relative">
+                          <input
+                            {...register("password", {
+                              required: "Password is required",
+                              minLength: {
+                                value: 6,
+                                message:
+                                  "Password must be at least 6 characters",
+                              },
+                            })}
+                            type={showPass ? "password" : "text"}
+                            placeholder="Password"
+                            className="border-slate-400 focus:outline-none border p-2 w-full"
+                          />
+                          <button
+                            type="button"
+                            className="absolute top-2 right-2"
+                            onClick={() => setShowPass(!showPass)}
+                          >
+                            {showPass ? <EyeClosed /> : <Eye />}
+                          </button>
+                        </div>
                         {errors.password && (
                           <p className="text-red-500">
                             {errors.password.message}
@@ -180,10 +185,8 @@ const SignUp = () => {
                     <div className="flex gap-5">
                       <div className="w-full">
                         <input
-                          {...register("countryCode", {
-                            required: "Country code is required",
-                          })}
-                          placeholder="Country Code"
+                          {...register("countryCode", {})}
+                          placeholder="Your countryCode"
                           type="number"
                           className="border-slate-400 focus:outline-none border p-2 w-full"
                         />
@@ -195,9 +198,7 @@ const SignUp = () => {
                       </div>
                       <div className="w-full">
                         <input
-                          {...register("mobileNumber", {
-                            required: "Mobile number is required",
-                          })}
+                          {...register("mobileNumber", {})}
                           placeholder="Mobile Number"
                           type="number"
                           className="border-slate-400 focus:outline-none border p-2 w-full"
@@ -229,12 +230,12 @@ const SignUp = () => {
                       className="border-slate-400 focus:outline-none border p-2 w-full"
                     >
                       <option value="">Select...</option>
-                      <option value="Mr">Mr</option>
-                      <option value="Miss">Miss</option>
-                      <option value="Ms">Ms</option>
-                      <option value="Mrs">Mrs</option>
-                      <option value="Dr">Dr</option>
-                      <option value="Professor">Professor</option>
+                      <option value="Mr">Fontend Developer</option>
+                      <option value="Miss">Backend Developer</option>
+                      <option value="Ms">Mernstack Developer</option>
+                      <option value="Mrs">Pernstack Developer</option>
+                      <option value="Dr">Software Developer</option>
+                      <option value="Professor">Web Developer</option>
                     </select>
                     {errors.title && (
                       <p className="text-red-500">{errors.title.message}</p>
@@ -257,9 +258,7 @@ const SignUp = () => {
                       </div>
                       <div className="w-full">
                         <input
-                          {...register("lastName", {
-                            required: "Last name is required",
-                          })}
+                          {...register("lastName", {})}
                           placeholder="Last Name"
                           className="border-slate-400 focus:outline-none border p-2 w-full"
                         />
@@ -272,13 +271,20 @@ const SignUp = () => {
                     </div>
 
                     <div className="flex gap-5">
-                      <input
-                        {...register("dateOfBirth", {
-                          required: "Date of birth is required",
-                        })}
-                        type="date"
-                        className="border-slate-400 focus:outline-none border p-2 w-full"
-                      />
+                      <div className="w-full">
+                        <input
+                          {...register("dateOfBirth", {
+                            required: "Date of birth is required",
+                          })}
+                          type="date"
+                          className="border-slate-400 focus:outline-none border p-2 w-full"
+                        />
+                        {errors.dateOfBirth && (
+                          <p className="text-red-500">
+                            {errors.dateOfBirth.message}
+                          </p>
+                        )}
+                      </div>
                       <div className="w-1/2">
                         <label className="text-sm font-medium mb-2">
                           Gender (optional)
@@ -305,11 +311,18 @@ const SignUp = () => {
                         </div>
                       </div>
                     </div>
-                    {errors.dateOfBirth && (
-                      <p className="text-red-500">
-                        {errors.dateOfBirth.message}
-                      </p>
-                    )}
+
+                    <div className="w-full">
+                      <input
+                        {...register("nid", {})}
+                        placeholder="Your NID"
+                        type="number"
+                        className="border-slate-400 focus:outline-none border p-2 w-full"
+                      />
+                      {errors.nid && (
+                        <p className="text-red-500">{errors.nid.message}</p>
+                      )}
+                    </div>
                   </div>
                 </div>
               </div>
@@ -326,9 +339,7 @@ const SignUp = () => {
                 <div className="md:w-[70%] ml-auto">
                   <div className="space-y-2">
                     <input
-                      {...register("country", {
-                        required: "Country is required",
-                      })}
+                      {...register("country", {})}
                       placeholder="Country/region of residence"
                       className="border-slate-400 focus:outline-none border p-2 w-full"
                     />
@@ -337,9 +348,11 @@ const SignUp = () => {
                     )}
                   </div>
                   <div className="mt-6">
-                    <button disabled={loading} className="bg-primary flex items-center justify-center gap-2 text-white px-6 py-2 rounded-sm shadow hover:bg-[#722246]">
-                      {loading &&  <Loader className="animate-spin" />}
-                   
+                    <button
+                      disabled={loading}
+                      className="bg-primary flex items-center justify-center gap-2 text-white px-6 py-2 rounded-sm shadow hover:bg-[#722246]"
+                    >
+                      {loading && <Loader className="animate-spin" />}
                       Create an account
                     </button>
                   </div>
@@ -358,17 +371,18 @@ const SignUp = () => {
                   className="border-slate-400 focus:outline-none border p-3 w-full mb-5"
                   placeholder="Enter OTP"
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value)} // Update OTP state
+                  onChange={(e) => setOtp(e.target.value)}
                   required
                 />
               </div>
               <div className="w-full">
                 <button
-                disabled={loading}
+                  disabled={loading}
                   type="submit"
-                  className={`px-5 w-full py-3 ${loading && "bg-[#8e2f5d]"}  bg-primary rounded-sm text-white`}
+                  className={`px-5 w-full py-3 ${
+                    loading && "bg-[#8e2f5d]"
+                  }  bg-primary rounded-sm text-white`}
                 >
-                  
                   Verify OTP
                 </button>
               </div>
