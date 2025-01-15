@@ -44,7 +44,7 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/signup",
+        "http://localhost:5000/api/auth/signup",
         newUser
       );
       console.log("this is a response data", response.data); // Check the structure of response data
@@ -70,7 +70,7 @@ const SignUp = () => {
     e.preventDefault(); // Prevent default form submission
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/verify-otp",
+        "http://localhost:5000/api/auth/verify-otp",
         { email, otp }
       );
       console.log("otttttttttp", response);
@@ -81,6 +81,7 @@ const SignUp = () => {
         // Redirect or show the next page
       }
     } catch (error) {
+      setLoading(false)
       console.log(error);
       alert("Invalid or expired OTP");
     }

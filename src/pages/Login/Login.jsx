@@ -1,9 +1,10 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useCookie } from "../../hooks/useCookie";
 import { useState } from "react";
 import { Eye, EyeClosed } from "lucide-react";
+import ReCAPTCHA from "react-google-recaptcha";
+import { useCookie } from "../../hooks/useCookie";
 
 const Login = () => {
   const {
@@ -11,54 +12,55 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const { setCookie } = useCookie({ key: "Token", days: 7 });
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(true);
+  const [recaptchaToken, setRecaptchaToken] = useState("");
+  const { setCookie } = useCookie({ key: "Token", days: 7 });
 
   const navigate = useNavigate();
 
+  function onChange(value) {
+    console.log("Captcha value:", value);
+    setRecaptchaToken(value || ""); // Set token to send to backend
+  }
+
   const onSubmit = async (data) => {
     setLoading(true);
-    try {
-      // Send login request to the backend
-      const response = await axios.post("http://localhost:5000/api/login", {
-        email: data.email,
-        password: data.password,
-      });
 
-      // Check if the response is successful
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/login",
+        {
+          email: data.email,
+          password: data.password,
+          recaptchaToken,
+        }
+      );
+
       if (response.status === 200) {
-        // Store the JWT token in localStorage or cookies (optional)
         setLoading(false);
         const token = response.data.token;
         if (token) {
-          setCookie(token); // Set the token in the cookie
-          alert("loggged in successfully and token stored in cookie");
+          alert("Logged in successfully");
+          setCookie(token);
+          navigate("/");
         } else {
           alert("Failed to retrieve token");
         }
-
-        // Redirect the user to a protected route (for example, the dashboard)
-        navigate("/"); // Replace with the actual route you want to redirect to
       }
     } catch (error) {
-      // Handle any errors from the API
-      if (error.response) {
-        // Server responded with an error
-        alert(error.response.data.error || "Login failed");
-      } else {
-        // Something else went wrong
-        alert("Something went wrong. Please try again later.");
-      }
+      setLoading(false);
+      alert(error.response?.data?.error || "Something went wrong");
     }
   };
+
   return (
     <div className="bg-gray-100 h-screen">
       <div className="pt-20">
         <div className="bg-white w-11/12 md:w-[40%] mx-auto space-y-4 rounded-sm px-6 pt-10 pb-5">
           <h3 className="text-3xl">Log in to your account</h3>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-            <div className="">
+            <div>
               <input
                 {...register("email", {
                   required: "Email is required",
@@ -101,34 +103,20 @@ const Login = () => {
                 )}
               </div>
             </div>
-            <div>
-              <span className="font-semibold text-black underline">
-                Forgot your password
-              </span>
-            </div>
+            <ReCAPTCHA
+              sitekey="6LchN7gqAAAAAN1x37YAX0nhMkvuta3w_0ZiRElH"
+              onChange={onChange}
+            />
             <button
               disabled={loading}
+              type="submit"
               className={`${
                 loading && "bg-[#8e2f5d]"
               } bg-primary text-white font-semibold text-lg rounded-full w-full py-3 hover:bg-[#75244b]`}
             >
               Log In
             </button>
-            <div className="flex items-center gap-1">
-              <div className="h-[1px] w-full bg-slate-600"></div>
-              or
-              <div className="h-[1px] w-full bg-slate-600"></div>
-            </div>
           </form>
-          <div>
-            <button className="text-center bg-slate-200 hover:bg-slate-300 w-full rounded-full">
-              <img
-                src="https://storage.googleapis.com/libraries-lib-production/images/GoogleLogo-canvas-404-300px.original.png"
-                alt="google icon"
-                className="h-14 w-14 mx-auto"
-              />
-            </button>
-          </div>
           <div className="text-primary text-lg mt-5 text-center cursor-pointer">
             <Link to="/signup">
               Are you new here? <span className="underline">Sign up</span>

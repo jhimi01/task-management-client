@@ -1,23 +1,23 @@
 // import { useState } from "react";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import BookingForm from "../../components/BookingForm";
-import axios from "axios";
+// import axios from "axios";
 
 const Home = () => {
-  const [data, setData] = useState();
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await axios.get("http://localhost:5000/users");
-        console.log("These are all users:", response.data);
-        setData(response.data);
-      } catch (error) {
-        console.error("Error fetching users:", error);
-      }
-    };
+  // const [data, setData] = useState();
+  // useEffect(() => {
+  //   const fetchUsers = async () => {
+  //     try {
+  //       const response = await axios.get("http://localhost:5000/users");
+  //       console.log("These are all users:", response.data);
+  //       setData(response.data);
+  //     } catch (error) {
+  //       console.error("Error fetching users:", error);
+  //     }
+  //   };
 
-    fetchUsers();
-  }, []);
+  //   fetchUsers();
+  // }, []);
 
   return (
     <>
@@ -62,7 +62,7 @@ const Home = () => {
       </div>
 
       {/* all api */}
-      <div className="wrapper my-10">
+      {/* <div className="wrapper my-10">
         {data?.map((item, index) => {
           return (
             <div key={index}>
@@ -72,7 +72,7 @@ const Home = () => {
             </div>
           );
         })}
-      </div>
+      </div> */}
     </>
   );
 };
