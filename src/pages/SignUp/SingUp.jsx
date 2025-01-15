@@ -25,7 +25,7 @@ const SignUp = () => {
       email: data.email,
       password: data.password,
       nid: data.nid,
-      countryCode: data.countryCode,
+      address: data.address, //---------
       mobileNumber: data.mobileNumber,
       gender: data.gender,
       title: data.title,
@@ -55,6 +55,7 @@ const SignUp = () => {
 
       console.log("this is a data", response); // Log the full response for debugging
     } catch (error) {
+      setLoading(false)
       alert("An error occurred", error.message);
       console.error(
         "Error:",
@@ -185,14 +186,14 @@ const SignUp = () => {
                     <div className="flex gap-5">
                       <div className="w-full">
                         <input
-                          {...register("countryCode", {})}
-                          placeholder="Your countryCode"
-                          type="number"
+                          {...register("address", {})}
+                          placeholder="Your address"
+                          type="text"
                           className="border-slate-400 focus:outline-none border p-2 w-full"
                         />
-                        {errors.countryCode && (
+                        {errors.address && (
                           <p className="text-red-500">
-                            {errors.countryCode.message}
+                            {errors.address.message}
                           </p>
                         )}
                       </div>
@@ -230,12 +231,12 @@ const SignUp = () => {
                       className="border-slate-400 focus:outline-none border p-2 w-full"
                     >
                       <option value="">Select...</option>
-                      <option value="Mr">Fontend Developer</option>
-                      <option value="Miss">Backend Developer</option>
-                      <option value="Ms">Mernstack Developer</option>
-                      <option value="Mrs">Pernstack Developer</option>
-                      <option value="Dr">Software Developer</option>
-                      <option value="Professor">Web Developer</option>
+                      <option value="Fontend Developer">Fontend Developer</option>
+                      <option value="Backend Developer">Backend Developer</option>
+                      <option value="Mernstack Developer">Mernstack Developer</option>
+                      <option value="Pernstack Developer">Pernstack Developer</option>
+                      <option value="Software Developer">Software Developer</option>
+                      <option value="Web Developer">Web Developer</option>
                     </select>
                     {errors.title && (
                       <p className="text-red-500">{errors.title.message}</p>

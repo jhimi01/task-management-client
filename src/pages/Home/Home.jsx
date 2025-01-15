@@ -1,14 +1,26 @@
 // import { useState } from "react";
 // import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 import BookingForm from "../../components/BookingForm";
+import useLoggedInUser from "../../hooks/useLoggedInUser";
+// import axios from "axios";
+// import { useCookie } from "../../hooks/useCookie";
+// import useLoggedInUser from "../../hooks/useLoggedInUser";
 // import axios from "axios";
 
 const Home = () => {
+  // const { getCookie } = useCookie({ key: "Token", days: 7 });
+  // const token = getCookie()
+  // console.log(token)
   // const [data, setData] = useState();
   // useEffect(() => {
   //   const fetchUsers = async () => {
   //     try {
-  //       const response = await axios.get("http://localhost:5000/users");
+  //       const response = await axios.get("http://localhost:5000/api/auth/loggedin-user", {
+  //         headers: {
+  //           Authorization: `Bearer ${token}`,
+  //         },
+  //       });
   //       console.log("These are all users:", response.data);
   //       setData(response.data);
   //     } catch (error) {
@@ -18,6 +30,13 @@ const Home = () => {
 
   //   fetchUsers();
   // }, []);
+ 
+  // console.log("data",data)
+
+    const { user } = useLoggedInUser();
+    console.log("this is sfsgfdhdsggfdg", user)
+
+
 
   return (
     <>

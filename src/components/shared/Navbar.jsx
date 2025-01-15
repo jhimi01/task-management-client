@@ -51,6 +51,9 @@ const Navbar = () => {
               <li>
                 <Link to="/">Privilege Club</Link>
               </li>
+              <li>
+                <Link to="/profile">My Profile</Link>
+              </li>
             </ul>
           </div>
           {/* extra service */}
