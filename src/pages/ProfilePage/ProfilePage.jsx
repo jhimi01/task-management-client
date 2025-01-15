@@ -44,7 +44,7 @@ const ProfilePage = () => {
                 <Edit className="absolute bottom-5 right-2 cursor-pointer bg-white group-hover:block hidden" />
               </div>
               <div className="text-slate-800">
-                <h1 className="text-xl font-semibold">
+                <h1 className="text-xl font-semibold capitalize">
                   {user.userData?.firstName} {user.userData?.lastName}
                 </h1>
                 <p>{user.userData?.title}</p>
