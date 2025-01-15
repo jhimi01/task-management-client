@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 // import { useCookie } from "../../hooks/useCookie";
 import { useState } from "react";
+import { Eye, EyeClosed, Loader } from 'lucide-react';
 
 const SignUp = () => {
   const {
@@ -14,17 +15,16 @@ const SignUp = () => {
   const [showOTP, setShowOTP] = useState(false);
   const [otp, setOtp] = useState("");
   const [email, setEmail] = useState(""); // Store email here for OTP verification
+  const [loading, setLoading] = useState(false); // Store email here for OTP verification
+  const [showPass, setShowPass] = useState(true); // Store email here for OTP verification
 
   console.log(otp, showOTP);
   console.log(otp);
 
   const navigate = useNavigate();
-  // const location = useLocation();
-  // const from = location.state?.from?.pathname || "/";
-
-  // const { setCookie } = useCookie({ key: "Token", days: 7 });
 
   const onSubmit = async (data) => {
+    setLoading(true)
     const newUser = {
       email: data.email,
       password: data.password,
@@ -49,16 +49,10 @@ const SignUp = () => {
       );
       console.log("this is a response data", response.data); // Check the structure of response data
       if (response.status === 200) {
+        setLoading(false)
         alert("OTP sent to your email");
         setShowOTP(true); // Show OTP input form
       }
-      // const token = response.data.token;
-      // if (token) {
-      //   setCookie(token); // Set the token in the cookie
-      //   alert("User registered successfully and token stored in cookie");
-      // } else {
-      //   alert("Failed to retrieve token");
-      // }
       setEmail(data.email);
 
       console.log("this is a data", response); // Log the full response for debugging
@@ -72,6 +66,7 @@ const SignUp = () => {
   };
 
   const handleVerifyOTP = async (e) => {
+    setLoading(true)
     e.preventDefault(); // Prevent default form submission
     try {
       const response = await axios.post(
@@ -80,6 +75,7 @@ const SignUp = () => {
       );
       console.log("otttttttttp", response);
       if (response.status === 200) {
+        setLoading(false)
         alert("User verified successfully");
         navigate("/login");
         // Redirect or show the next page
@@ -142,7 +138,8 @@ const SignUp = () => {
 
                     <div className="flex w-full gap-5">
                       <div className="w-full">
-                        <input
+                      <div className="relative">
+                      <input
                           {...register("password", {
                             required: "Password is required",
                             minLength: {
@@ -150,10 +147,12 @@ const SignUp = () => {
                               message: "Password must be at least 6 characters",
                             },
                           })}
-                          type="password"
+                          type={showPass ?"password" : "text"}
                           placeholder="Password"
                           className="border-slate-400 focus:outline-none border p-2 w-full"
                         />
+                        <button type="button" className="absolute top-2 right-2" onClick={()=>setShowPass(!showPass)}>{showPass ?  <EyeClosed /> : <Eye />}</button>
+                      </div>                       
                         {errors.password && (
                           <p className="text-red-500">
                             {errors.password.message}
@@ -224,7 +223,10 @@ const SignUp = () => {
                 </div>
                 <div className="md:w-[70%] ml-auto">
                   <div className="space-y-2">
-                    <select {...register("title")} className="border-slate-400 focus:outline-none border p-2 w-full">
+                    <select
+                      {...register("title")}
+                      className="border-slate-400 focus:outline-none border p-2 w-full"
+                    >
                       <option value="">Select...</option>
                       <option value="Mr">Mr</option>
                       <option value="Miss">Miss</option>
@@ -334,7 +336,9 @@ const SignUp = () => {
                     )}
                   </div>
                   <div className="mt-6">
-                    <button className="bg-primary text-white px-6 py-2 rounded-sm shadow hover:bg-[#722246]">
+                    <button disabled={loading} className="bg-primary flex items-center justify-center gap-2 text-white px-6 py-2 rounded-sm shadow hover:bg-[#722246]">
+                      {loading &&  <Loader className="animate-spin" />}
+                   
                       Create an account
                     </button>
                   </div>
@@ -359,9 +363,11 @@ const SignUp = () => {
               </div>
               <div className="w-full">
                 <button
+                disabled={loading}
                   type="submit"
-                  className="px-5 w-full py-3 bg-primary rounded-sm text-white"
+                  className={`px-5 w-full py-3 ${loading && "bg-[#8e2f5d]"}  bg-primary rounded-sm text-white`}
                 >
+                  
                   Verify OTP
                 </button>
               </div>

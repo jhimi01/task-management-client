@@ -1,7 +1,9 @@
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";  // Use useNavigate for redirection
-import axios from "axios";  // Import axios for making the API request
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { useCookie } from "../../hooks/useCookie";
+import { useState } from "react";
+import { Eye, EyeClosed } from "lucide-react";
 
 const Login = () => {
   const {
@@ -10,20 +12,24 @@ const Login = () => {
     formState: { errors },
   } = useForm();
   const { setCookie } = useCookie({ key: "Token", days: 7 });
-  
-  const navigate = useNavigate();  // For navigation after login success
-  
+  const [loading, setLoading] = useState(false);
+  const [showPass, setShowPass] = useState(true);
+
+  const navigate = useNavigate();
+
   const onSubmit = async (data) => {
+    setLoading(true);
     try {
       // Send login request to the backend
       const response = await axios.post("http://localhost:5000/api/login", {
         email: data.email,
         password: data.password,
       });
-      
+
       // Check if the response is successful
       if (response.status === 200) {
         // Store the JWT token in localStorage or cookies (optional)
+        setLoading(false);
         const token = response.data.token;
         if (token) {
           setCookie(token); // Set the token in the cookie
@@ -33,7 +39,7 @@ const Login = () => {
         }
 
         // Redirect the user to a protected route (for example, the dashboard)
-        navigate("/");  // Replace with the actual route you want to redirect to
+        navigate("/"); // Replace with the actual route you want to redirect to
       }
     } catch (error) {
       // Handle any errors from the API
@@ -70,27 +76,42 @@ const Login = () => {
               )}
             </div>
             <div>
-              <input
-                {...register("password", {
-                  required: "Password is required",
-                  minLength: {
-                    value: 6,
-                    message: "Password must be at least 6 characters",
-                  },
-                })}
-                placeholder="Password"
-                className="border-slate-400 rounded-md focus:outline-none border p-3 w-full"
-              />
-              {errors.password && (
-                <p className="text-red-500">{errors.password.message}</p>
-              )}
+              <div className="relative">
+                <input
+                  {...register("password", {
+                    required: "Password is required",
+                    minLength: {
+                      value: 6,
+                      message: "Password must be at least 6 characters",
+                    },
+                  })}
+                  type={showPass ? "password" : "text"}
+                  placeholder="Password"
+                  className="border-slate-400 rounded-md focus:outline-none border p-3 w-full"
+                />
+                <button
+                  type="button"
+                  className="absolute top-2 right-2"
+                  onClick={() => setShowPass(!showPass)}
+                >
+                  {showPass ? <EyeClosed /> : <Eye />}
+                </button>
+                {errors.password && (
+                  <p className="text-red-500">{errors.password.message}</p>
+                )}
+              </div>
             </div>
             <div>
               <span className="font-semibold text-black underline">
                 Forgot your password
               </span>
             </div>
-            <button className="bg-primary text-white font-semibold text-lg rounded-full w-full py-3 hover:bg-[#75244b]">
+            <button
+              disabled={loading}
+              className={`${
+                loading && "bg-[#8e2f5d]"
+              } bg-primary text-white font-semibold text-lg rounded-full w-full py-3 hover:bg-[#75244b]`}
+            >
               Log In
             </button>
             <div className="flex items-center gap-1">

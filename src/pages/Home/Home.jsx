@@ -27,7 +27,7 @@ const Home = () => {
           backgroundImage: `linear-gradient(
             to right, 
             rgba(0, 0, 0, 0.7), 
-            rgba(0, 0, 0, 0.3) 30%, 
+            rgba(0, 0, 0, 0.3) 40%, 
             rgba(0, 0, 0, 0.1) 50%
           ),
           linear-gradient(
