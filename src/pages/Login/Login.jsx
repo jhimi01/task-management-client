@@ -17,6 +17,8 @@ const Login = () => {
   const [recaptchaToken, setRecaptchaToken] = useState("");
   const { setCookie } = useCookie({ key: "Token", days: 7 });
   const [showOTP, setShowOTP] = useState(false);
+  const [otp, setOtp] = useState();
+  const [email, setEmail] = useState("");
 
   const navigate = useNavigate();
 
@@ -25,9 +27,40 @@ const Login = () => {
     setRecaptchaToken(value || ""); // Set token to send to backend
   }
 
+  // const onSubmit = async (data) => {
+  //   setLoading(true);
+  //   setShowOTP(false);
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:5000/api/auth/login",
+  //       {
+  //         email: data.email,
+  //         password: data.password,
+  //         recaptchaToken,
+  //       }
+  //     );
+
+  //     if (response.status === 200) {
+  //       setLoading(false);
+  //       const token = response.data.token;
+  //       if (token) {
+  //         alert("Logged in successfully");
+  //         setCookie(token);
+  //         navigate("/");
+  //       } else {
+  //         alert("Failed to retrieve token");
+  //       }
+  //     }
+  //   } catch (error) {
+  //     setLoading(false);
+  //     alert(error.response?.data?.error || "Something went wrong");
+  //   }
+  // };
+
   const onSubmit = async (data) => {
     setLoading(true);
     setShowOTP(false);
+    setEmail(data.email);
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/login",
@@ -40,18 +73,39 @@ const Login = () => {
 
       if (response.status === 200) {
         setLoading(false);
-        const token = response.data.token;
-        if (token) {
-          alert("Logged in successfully");
-          setCookie(token);
-          navigate("/");
-        } else {
-          alert("Failed to retrieve token");
-        }
+        alert(response.data.message); // Show OTP sent message
+        setShowOTP(true); // Show OTP input form
       }
     } catch (error) {
       setLoading(false);
       alert(error.response?.data?.error || "Something went wrong");
+    }
+  };
+
+  const handleVerifyOTP = async (otp) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/verify-otp-login",
+        {
+          email: email, // Remember to pass the email from state
+          otp,
+        }
+      );
+
+      console.log(response);
+
+      if (response.status === 200) {
+        const { token, userData } = response.data;
+        console.log("this is userdata", userData);
+        setCookie(token);
+        navigate("/");
+        // Optionally store user data in local storage/session or state
+        alert("Logged in successfully");
+        // navigate("/"); // Navigate to the home page
+      }
+    } catch (error) {
+      console.log(error.response?.data?.error);
+      alert(error.response?.data?.error || "OTP verification failed");
     }
   };
 
@@ -122,32 +176,36 @@ const Login = () => {
             </form>
           ) : (
             <form
-              // onSubmit={handleVerifyOTP}
-              className="flex items-center justify-center gap-4"
-            >
-              <div className="w-full">
-                <h2 className="text-xl text-primary">Enter OTP</h2>
-                <input
-                  type="text"
-                  className="border-slate-400 focus:outline-none border p-3 w-full mb-5"
-                  placeholder="Enter OTP"
-                  // value={otp}
-                  // onChange={(e) => setOtp(e.target.value)}
-                  required
-                />
-              </div>
-              <div className="w-full">
-                <button
-                  disabled={loading}
-                  type="submit"
-                  className={`px-5 w-full py-3 ${
-                    loading && "bg-[#8e2f5d]"
-                  }  bg-primary rounded-sm text-white`}
-                >
-                  Verify OTP
-                </button>
-              </div>
-            </form>
+            onSubmit={handleSubmit(() => handleVerifyOTP(otp))}
+            className="flex items-center justify-center gap-4"
+          >
+            <div className="w-full">
+              <h2 className="text-xl text-primary">Enter OTP</h2>
+              <input
+                {...register("otp", { required: "OTP is required" })}
+                type="text"
+                className="border-slate-400 focus:outline-none border p-3 w-full mb-5"
+                placeholder="Enter OTP"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+              />
+              {errors.otp && (
+                <p className="text-red-500">{errors.otp.message}</p>
+              )}
+            </div>
+            <div className="w-full">
+              <button
+                disabled={loading}
+                type="submit"
+                className={`px-5 w-full py-3 ${
+                  loading && "bg-[#8e2f5d]"
+                }  bg-primary rounded-sm text-white`}
+              >
+                Verify OTP
+              </button>
+            </div>
+          </form>
+          
           )}
 
           <div className="text-primary text-lg mt-5 text-center cursor-pointer">
