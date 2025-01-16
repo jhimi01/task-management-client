@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useCookie } from "../hooks/useCookie";
+import PropTypes from "prop-types";
 
 const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
   const [formData, setFormData] = useState(userData);
@@ -24,9 +25,6 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
     setError(null);
 
     try {
-      // Assuming the token is stored in localStorage or you get it from a context
-      //   const token = localStorage.getItem("token"); // Or use another method to get the token
-
       const response = await fetch(
         `http://localhost:5000/api/auth/edit-profile`,
         {
@@ -38,18 +36,14 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
           body: JSON.stringify(formData),
         }
       );
-
       const result = await response.json();
-
       if (!response.ok) {
         throw new Error(result.message || "Something went wrong");
       }
 
       setLoading(false);
-
-      // Call the onSave callback with the updated data
       onSave(formData);
-      onClose(); // Close the modal after saving
+      onClose();
     } catch (error) {
       setError(error.message);
     } finally {
@@ -264,6 +258,13 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
       </div>
     </div>
   );
+};
+
+EditProfileModal.propTypes = {
+  isOpen: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  userData: PropTypes.func.isRequired,
+  onSave: PropTypes.func.isRequired,
 };
 
 export default EditProfileModal;

@@ -4,10 +4,17 @@ import useLoggedInUser from "../../hooks/useLoggedInUser";
 import EditProfileModal from "../../components/EditProfileModal";
 import { format } from "date-fns";
 import ImageUpload from "../../components/ImageUpload";
+import ResetPasswordModal from "../../components/ResetPasswordModal";
+import { useCookie } from "../../hooks/useCookie";
+import axios from "axios";
 
 const ProfilePage = () => {
   const { user, loading, error, refetch } = useLoggedInUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
+    useState(false);
+  const { getCookie, setCookie } = useCookie({ key: "Token", days: 7 });
+  const token = getCookie();
 
   const handleEditClick = () => {
     setIsModalOpen(true);
@@ -27,6 +34,49 @@ const ProfilePage = () => {
   if (error) return <p>Error: {error}</p>;
 
   console.log("gender", user?.userData?.gender);
+
+  // reset password
+  const handleResetPasswordClick = () => {
+    setIsResetPasswordModalOpen(true);
+  };
+
+  const handleResetPasswordSave = async ({ oldPassword, newPassword }) => {
+    if (!token) {
+      alert("No token found. Please login again.");
+      return;
+    }
+
+    try {
+      // Sending reset password request with Axios
+      const response = await axios.post(
+        "http://localhost:5000/api/auth/reset-password", // Your backend endpoint
+        {
+          email: user?.userData?.email,
+          oldPassword,
+          newPassword,
+        },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // Include the token in Authorization header
+          },
+        }
+      );
+
+      const { token: newToken } = response.data; // Renaming `token` to `newToken`
+      setCookie(newToken); // Update the token in the cookie
+
+      if (response.data.error) {
+        alert(response.data.error);
+      } else {
+        alert(response.data.message); // Success message
+        setIsResetPasswordModalOpen(false); // Close modal after success
+      }
+    } catch (error) {
+      console.error("Error:", error);
+      alert("An error occurred while resetting the password.");
+    }
+  };
 
   return (
     <div className="bg-gray-200">
@@ -74,10 +124,19 @@ const ProfilePage = () => {
                   </tr>
                 </thead>
                 <tbody>
+                  {/* name */}
+                  <tr className="border-b">
+                    <td className="p-2 font-semibold">Name:</td>
+                    <td className="p-2">
+                      {user.userData?.firstName} {user.userData?.lastName}
+                    </td>
+                  </tr>
+                  {/* mobileNumber */}
                   <tr>
                     <td className="p-2 font-semibold">Mobile Number:</td>
                     <td className="p-2">{user.userData?.mobileNumber}</td>
                   </tr>
+                  {/* date of birth */}
                   <tr className="border-t">
                     <td className="p-2 font-semibold">Date of Birth:</td>
                     <td className="p-2">
@@ -87,14 +146,17 @@ const ProfilePage = () => {
                       )}{" "}
                     </td>
                   </tr>
+                  {/* gender */}
                   <tr className="border-t">
                     <td className="p-2 font-semibold">Gender:</td>
                     <td className="p-2">{user.userData?.gender}</td>
                   </tr>
+                  {/* nid */}
                   <tr className="border-t">
                     <td className="p-2 font-semibold">NID:</td>
                     <td className="p-2">{user.userData?.nid}</td>
                   </tr>
+                  {/* createdAt */}
                   <tr className="border-t">
                     <td className="p-2 font-semibold">Created Account:</td>
                     <td className="p-2">
@@ -104,20 +166,18 @@ const ProfilePage = () => {
                       )}
                     </td>
                   </tr>
-                  <tr className="border-t">
-                    <td className="p-2 font-semibold">Name:</td>
-                    <td className="p-2">
-                      {user.userData?.firstName} {user.userData?.lastName}
-                    </td>
-                  </tr>
-                  <tr className="border-t">
+
+                  <tr className="border-y">
                     <td className="p-2 font-semibold">Country:</td>
                     <td className="p-2">{user.userData?.country}</td>
                   </tr>
                 </tbody>
               </table>
 
-              <div className="text-sm text-blue-800 underline cursor-pointer my-4">
+              <div
+                className="text-sm text-blue-800 underline cursor-pointer my-4"
+                onClick={handleResetPasswordClick}
+              >
                 Reset Password
               </div>
               <div className="mt-4">
@@ -140,6 +200,18 @@ const ProfilePage = () => {
         userData={user.userData}
         onSave={handleSave}
       />
+
+      {/* Reset Password */}
+      <ResetPasswordModal
+        isOpen={isResetPasswordModalOpen}
+        onClose={() => setIsResetPasswordModalOpen(false)}
+        onSave={handleResetPasswordSave} // Passing the function here
+      />
+      {/* <ResetPasswordModal
+        isOpen={isResetPasswordModalOpen}
+        onClose={() => setIsResetPasswordModalOpen(false)}
+        onSave={handleResetPasswordSave}
+      /> */}
     </div>
   );
 };
