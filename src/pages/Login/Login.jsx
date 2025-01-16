@@ -7,6 +7,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { useCookie } from "../../hooks/useCookie";
 import useLoggedInUser from "../../hooks/useLoggedInUser";
 import { Bounce, ToastContainer, toast } from "react-toastify";
+import LoginGoogle from "../../components/LoginGoogle";
 
 const Login = () => {
   const {
@@ -200,14 +201,14 @@ const Login = () => {
             <p>or</p>
             <div className="w-full h-[1px] bg-slate-700"></div>
           </div>
-          <button className="hover:bg-gray-300 rounded-full bg-gray-200 w-full py-1 flex justify-center items-center">
+          {/* <button className="hover:bg-gray-300 rounded-full bg-gray-200 w-full py-1 flex justify-center items-center">
             <img
               src="https://storage.googleapis.com/libraries-lib-production/images/GoogleLogo-canvas-404-300px.original.png"
               alt="google icon"
               className="h-14 w-14"
             />
-          </button>
-
+          </button> */}
+          <LoginGoogle />
           <div className="text-primary text-lg mt-5 text-center cursor-pointer">
             <Link to="/signup">
               Are you new here? <span className="underline">Sign up</span>

@@ -3,6 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Eye, EyeClosed, Loader } from "lucide-react";
+import LoginGoogle from "../../components/LoginGoogle";
 
 const SignUp = () => {
   const {
@@ -55,7 +56,7 @@ const SignUp = () => {
 
       console.log("this is a data", response); // Log the full response for debugging
     } catch (error) {
-      setLoading(false)
+      setLoading(false);
       alert("An error occurred", error.message);
       console.error(
         "Error:",
@@ -106,13 +107,16 @@ const SignUp = () => {
                   <h1 className="text-primary text-lg">
                     Create an account using
                   </h1>
-                  <button className="hover:bg-gray-300 rounded-md p-1">
+                  {/* <button className="hover:bg-gray-300 rounded-md p-1">
                     <img
                       src="https://storage.googleapis.com/libraries-lib-production/images/GoogleLogo-canvas-404-300px.original.png"
                       alt="google icon"
                       className="h-14 w-14"
                     />
-                  </button>
+                  </button> */}
+                  <div className="my-3 w-36">
+                    <LoginGoogle />
+                  </div>
                   <h1 className="text-primary text-lg mb-3">
                     or join by filling up the form below
                   </h1>
@@ -231,11 +235,21 @@ const SignUp = () => {
                       className="border-slate-400 focus:outline-none border p-2 w-full"
                     >
                       <option value="">Select...</option>
-                      <option value="Fontend Developer">Fontend Developer</option>
-                      <option value="Backend Developer">Backend Developer</option>
-                      <option value="Mernstack Developer">Mernstack Developer</option>
-                      <option value="Pernstack Developer">Pernstack Developer</option>
-                      <option value="Software Developer">Software Developer</option>
+                      <option value="Fontend Developer">
+                        Fontend Developer
+                      </option>
+                      <option value="Backend Developer">
+                        Backend Developer
+                      </option>
+                      <option value="Mernstack Developer">
+                        Mernstack Developer
+                      </option>
+                      <option value="Pernstack Developer">
+                        Pernstack Developer
+                      </option>
+                      <option value="Software Developer">
+                        Software Developer
+                      </option>
                       <option value="Web Developer">Web Developer</option>
                     </select>
                     {errors.title && (
