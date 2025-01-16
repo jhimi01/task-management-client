@@ -2,31 +2,31 @@ import { useState } from "react";
 import { Edit } from "lucide-react";
 import useLoggedInUser from "../../hooks/useLoggedInUser";
 import EditProfileModal from "../../components/EditProfileModal";
-import { format } from "date-fns"; // Import the format function from date-fns
+import { format } from "date-fns";
+import ImageUpload from "../../components/ImageUpload";
 
 const ProfilePage = () => {
   const { user, loading, error, refetch } = useLoggedInUser();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  console.log("thisid user", user);
-
-  // const userInfo = user.userData;
-  // console.log("user info", user.userData);
-
   const handleEditClick = () => {
-    setIsModalOpen(true); // Open the modal
+    setIsModalOpen(true);
+  };
+
+  const handleImageChange = (newImageUrl) => {
+    refetch();
+    console.log("Image URL received from child:", newImageUrl);
   };
 
   const handleSave = (updatedData) => {
     refetch();
     console.log("Saved data:", updatedData);
-    // You can save the updated data to the backend here
   };
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
 
-  console.log();
+  console.log("gender", user?.userData?.gender);
 
   return (
     <div className="bg-gray-200">
@@ -37,12 +37,20 @@ const ProfilePage = () => {
             <div className="w-[30%] space-y-3 p-4 bg-white mx-auto text-center">
               <div className="group mx-auto relative w-40">
                 <img
-                  src="https://img.freepik.com/free-vector/blue-circle-with-white-user_78370-4707.jpg"
-                  className="w-40 h-40 mx-auto rounded-full group-hover:border-red-400 group-hover:scale-105 transition group-hover:border-4"
+                  src={
+                    user?.userData?.img ||
+                    (user?.userData?.gender !== "female"
+                      ? "https://static.vecteezy.com/system/resources/previews/032/176/197/non_2x/business-avatar-profile-black-icon-man-of-user-symbol-in-trendy-flat-style-isolated-on-male-profile-people-diverse-face-for-social-network-or-web-vector.jpg"
+                      : "https://icons.iconarchive.com/icons/icons8/ios7/512/Users-User-Female-2-icon.png")
+                  }
+                  className="w-40 h-40 object-cover mx-auto rounded-full group-hover:border-blue-400 group-hover:scale-105 transition group-hover:border-4"
                   alt="user pic"
                 />
-                <Edit className="absolute bottom-5 right-2 cursor-pointer bg-white group-hover:block hidden" />
+                <div className="absolute bottom-5 right-2 cursor-pointer bg-white group-hover:block hidden">
+                  <ImageUpload onChange={handleImageChange} />
+                </div>
               </div>
+
               <div className="text-slate-800">
                 <h1 className="text-xl font-semibold capitalize">
                   {user.userData?.firstName} {user.userData?.lastName}

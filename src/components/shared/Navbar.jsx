@@ -1,7 +1,11 @@
 import { CircleUserRound, Info, Search, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
+import useLoggedInUser from "../../hooks/useLoggedInUser";
 
 const Navbar = () => {
+  const { user } = useLoggedInUser();
+  const check = user
+  console.log(user)
   const { pathname } = useLocation();
   console.log(pathname);
 
