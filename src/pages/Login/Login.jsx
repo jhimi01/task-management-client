@@ -97,7 +97,7 @@ const Login = () => {
 
   return (
     <div className="bg-gray-100 h-screen">
-      <div className="pt-20">
+      <div className="pt-10">
         <div className="bg-white w-11/12 md:w-[40%] mx-auto space-y-4 rounded-sm px-6 pt-10 pb-5">
           <h3 className="text-3xl">Log in to your account</h3>
           {!showOTP ? (
@@ -194,6 +194,19 @@ const Login = () => {
               </div>
             </form>
           )}
+
+          <div className="flex items-center gap-2 justify-center">
+            <div className="w-full h-[1px] bg-slate-700"></div>
+            <p>or</p>
+            <div className="w-full h-[1px] bg-slate-700"></div>
+          </div>
+          <button className="hover:bg-gray-300 rounded-full bg-gray-200 w-full py-1 flex justify-center items-center">
+            <img
+              src="https://storage.googleapis.com/libraries-lib-production/images/GoogleLogo-canvas-404-300px.original.png"
+              alt="google icon"
+              className="h-14 w-14"
+            />
+          </button>
 
           <div className="text-primary text-lg mt-5 text-center cursor-pointer">
             <Link to="/signup">
