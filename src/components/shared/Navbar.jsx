@@ -1,11 +1,14 @@
-import { CircleUserRound, Info, Search, X } from "lucide-react";
+import { CircleUserRound, Info, LogOut, Search, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import useLoggedInUser from "../../hooks/useLoggedInUser";
+import { useCookie } from "../../hooks/useCookie";
 
 const Navbar = () => {
   const { user } = useLoggedInUser();
-  const check = user
-  console.log(user)
+
+  const { getCookie } = useCookie({ key: "Token", days: 7 });
+  const token = getCookie();
+  console.log(user);
   const { pathname } = useLocation();
   console.log(pathname);
 
@@ -67,14 +70,41 @@ const Navbar = () => {
               <Search />
             </div>
             {/* login/server */}
-            <div className="flex gap-2 items-center">
-              <CircleUserRound />
-              <div className="flex gap-2">
-                <Link to="/login">Log in</Link>
-                <span>|</span>
-                <Link to="/signup">Sign up</Link>
+            {user &&
+            user.loggedInUser &&
+            user.loggedInUser.id &&
+            user.loggedInUser.token &&
+            user.loggedInUser.token === token ? (
+              <div className="flex gap-5 items-center">
+                <Link to="/profile">
+                  <img
+                    className="w-12 h-12 rounded-full border-4 border-white"
+                    src={
+                      user?.userData?.img ||
+                      (user?.userData?.gender !== "female"
+                        ? "https://static.vecteezy.com/system/resources/previews/032/176/197/non_2x/business-avatar-profile-black-icon-man-of-user-symbol-in-trendy-flat-style-isolated-on-male-profile-people-diverse-face-for-social-network-or-web-vector.jpg"
+                        : "https://icons.iconarchive.com/icons/icons8/ios7/512/Users-User-Female-2-icon.png")
+                    }
+                    alt=""
+                  />
+                  {/* <CircleUserRound /> */}
+                </Link>
+                <div className="flex gap-2">
+                  <button className="flex items-center gap-1">
+                    Logout <LogOut />
+                  </button>
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="flex gap-2 items-center">
+                <CircleUserRound />
+                <div className="flex gap-2">
+                  <Link to="/login">Log in</Link>
+                  <span>|</span>
+                  <Link to="/signup">Sign up</Link>
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </div>

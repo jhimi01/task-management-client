@@ -382,9 +382,9 @@ const SignUp = () => {
                   type="submit"
                   className={`px-5 w-full py-3 ${
                     loading && "bg-[#8e2f5d]"
-                  }  bg-primary rounded-sm text-white`}
+                  }  bg-primary rounded-sm flex items-center gap-2 text-white`}
                 >
-                  Verify OTP
+                  Verify OTP {loading && <Loader className="animate-spin" />}
                 </button>
               </div>
             </form>

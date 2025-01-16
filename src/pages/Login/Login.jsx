@@ -2,9 +2,10 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useState } from "react";
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed, Loader } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useCookie } from "../../hooks/useCookie";
+import useLoggedInUser from "../../hooks/useLoggedInUser";
 
 const Login = () => {
   const {
@@ -12,6 +13,7 @@ const Login = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const { refetch } = useLoggedInUser();
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(true);
   const [recaptchaToken, setRecaptchaToken] = useState("");
@@ -26,37 +28,6 @@ const Login = () => {
     console.log("Captcha value:", value);
     setRecaptchaToken(value || ""); // Set token to send to backend
   }
-
-  // const onSubmit = async (data) => {
-  //   setLoading(true);
-  //   setShowOTP(false);
-  //   try {
-  //     const response = await axios.post(
-  //       "http://localhost:5000/api/auth/login",
-  //       {
-  //         email: data.email,
-  //         password: data.password,
-  //         recaptchaToken,
-  //       }
-  //     );
-
-  //     if (response.status === 200) {
-  //       setLoading(false);
-  //       const token = response.data.token;
-  //       if (token) {
-  //         alert("Logged in successfully");
-  //         setCookie(token);
-  //         navigate("/");
-  //       } else {
-  //         alert("Failed to retrieve token");
-  //       }
-  //     }
-  //   } catch (error) {
-  //     setLoading(false);
-  //     alert(error.response?.data?.error || "Something went wrong");
-  //   }
-  // };
-
   const onSubmit = async (data) => {
     setLoading(true);
     setShowOTP(false);
@@ -76,6 +47,7 @@ const Login = () => {
         alert(response.data.message); // Show OTP sent message
         setShowOTP(true); // Show OTP input form
       }
+      refetch();
     } catch (error) {
       setLoading(false);
       alert(error.response?.data?.error || "Something went wrong");
@@ -101,8 +73,10 @@ const Login = () => {
         navigate("/");
         // Optionally store user data in local storage/session or state
         alert("Logged in successfully");
+        refetch();
         // navigate("/"); // Navigate to the home page
       }
+      refetch();
     } catch (error) {
       console.log(error.response?.data?.error);
       alert(error.response?.data?.error || "OTP verification failed");
@@ -169,43 +143,44 @@ const Login = () => {
                 type="submit"
                 className={`${
                   loading && "bg-[#8e2f5d]"
-                } bg-primary text-white font-semibold text-lg rounded-full w-full py-3 hover:bg-[#75244b]`}
+                } bg-primary flex items-center gap-2 text-white font-semibold text-lg rounded-full w-full py-3 hover:bg-[#75244b]`}
               >
                 Log In
+                {loading && <Loader className="animate-spin" />}
               </button>
             </form>
           ) : (
             <form
-            onSubmit={handleSubmit(() => handleVerifyOTP(otp))}
-            className="flex items-center justify-center gap-4"
-          >
-            <div className="w-full">
-              <h2 className="text-xl text-primary">Enter OTP</h2>
-              <input
-                {...register("otp", { required: "OTP is required" })}
-                type="text"
-                className="border-slate-400 focus:outline-none border p-3 w-full mb-5"
-                placeholder="Enter OTP"
-                value={otp}
-                onChange={(e) => setOtp(e.target.value)}
-              />
-              {errors.otp && (
-                <p className="text-red-500">{errors.otp.message}</p>
-              )}
-            </div>
-            <div className="w-full">
-              <button
-                disabled={loading}
-                type="submit"
-                className={`px-5 w-full py-3 ${
-                  loading && "bg-[#8e2f5d]"
-                }  bg-primary rounded-sm text-white`}
-              >
-                Verify OTP
-              </button>
-            </div>
-          </form>
-          
+              onSubmit={handleSubmit(() => handleVerifyOTP(otp))}
+              className="flex items-center justify-center gap-4"
+            >
+              <div className="w-full">
+                <h2 className="text-xl text-primary">Enter OTP</h2>
+                <input
+                  {...register("otp", { required: "OTP is required" })}
+                  type="text"
+                  className="border-slate-400 focus:outline-none border p-3 w-full mb-5"
+                  placeholder="Enter OTP"
+                  value={otp}
+                  onChange={(e) => setOtp(e.target.value)}
+                />
+                {errors.otp && (
+                  <p className="text-red-500">{errors.otp.message}</p>
+                )}
+              </div>
+              <div className="w-full">
+                <button
+                  disabled={loading}
+                  type="submit"
+                  className={`px-5 w-full py-3 ${
+                    loading && "bg-[#8e2f5d]"
+                  }  bg-primary flex items-center gap-2 rounded-sm text-white`}
+                >
+                  Verify OTP
+                  {loading && <Loader className="animate-spin" />}
+                </button>
+              </div>
+            </form>
           )}
 
           <div className="text-primary text-lg mt-5 text-center cursor-pointer">
