@@ -6,6 +6,7 @@ import { Eye, EyeClosed, Loader } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { useCookie } from "../../hooks/useCookie";
 import useLoggedInUser from "../../hooks/useLoggedInUser";
+import { Bounce, ToastContainer, toast } from "react-toastify";
 
 const Login = () => {
   const {
@@ -70,6 +71,17 @@ const Login = () => {
         console.log("this is userdata", userData);
         setCookie(token);
         navigate("/");
+        toast("🦄 Wow so easy!", {
+          position: "top-center",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
         // Optionally store user data in local storage/session or state
         alert("Logged in successfully");
         refetch();
@@ -189,6 +201,19 @@ const Login = () => {
             </Link>
           </div>
         </div>
+        <ToastContainer
+          position="top-center"
+          autoClose={5000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
       </div>
     </div>
   );

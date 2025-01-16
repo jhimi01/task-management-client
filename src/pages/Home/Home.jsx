@@ -1,43 +1,6 @@
-// import { useState } from "react";
-// import { useEffect, useState } from "react";
-// import { useEffect, useState } from "react";
 import BookingForm from "../../components/BookingForm";
-import useLoggedInUser from "../../hooks/useLoggedInUser";
-// import axios from "axios";
-// import { useCookie } from "../../hooks/useCookie";
-// import useLoggedInUser from "../../hooks/useLoggedInUser";
-// import axios from "axios";
 
 const Home = () => {
-  // const { getCookie } = useCookie({ key: "Token", days: 7 });
-  // const token = getCookie()
-  // console.log(token)
-  // const [data, setData] = useState();
-  // useEffect(() => {
-  //   const fetchUsers = async () => {
-  //     try {
-  //       const response = await axios.get("http://localhost:5000/api/auth/loggedin-user", {
-  //         headers: {
-  //           Authorization: `Bearer ${token}`,
-  //         },
-  //       });
-  //       console.log("These are all users:", response.data);
-  //       setData(response.data);
-  //     } catch (error) {
-  //       console.error("Error fetching users:", error);
-  //     }
-  //   };
-
-  //   fetchUsers();
-  // }, []);
- 
-  // console.log("data",data)
-
-    const { user } = useLoggedInUser();
-    console.log("this is sfsgfdhdsggfdg", user)
-
-
-
   return (
     <>
       <div
@@ -79,19 +42,6 @@ const Home = () => {
       <div className="mb-20">
         <BookingForm />
       </div>
-
-      {/* all api */}
-      {/* <div className="wrapper my-10">
-        {data?.map((item, index) => {
-          return (
-            <div key={index}>
-              <h2 className="text-2xl ">users details</h2>
-              <h3>title: {item?.title}</h3>
-              <p>email: {item?.email}</p>
-            </div>
-          );
-        })}
-      </div> */}
     </>
   );
 };
