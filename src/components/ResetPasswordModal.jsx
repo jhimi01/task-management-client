@@ -35,7 +35,7 @@ const ResetPasswordModal = ({ isOpen, onClose, onSave }) => {
           </label>
           <input
             id="oldPassword"
-            type={showPass ? "password" : "text"}
+            type="password"
             className="w-full p-2 border border-gray-300 rounded mt-2"
             value={oldPassword}
             onChange={(e) => setOldPassword(e.target.value)}
