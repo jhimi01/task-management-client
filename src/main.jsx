@@ -10,6 +10,7 @@ import Home from './pages/Home/Home';
 import SingUp from './pages/SignUp/SingUp';
 import Login from './pages/Login/Login';
 import ProfilePage from './pages/ProfilePage/ProfilePage';
+import PrivateRoute from './route/PrivateRoute';
 
 const router = createBrowserRouter([
   {
@@ -30,7 +31,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: <ProfilePage />
+        element: <PrivateRoute><ProfilePage /></PrivateRoute>
       }
     ]
   },
