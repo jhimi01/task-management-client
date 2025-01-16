@@ -25,7 +25,6 @@ const Login = () => {
   const navigate = useNavigate();
 
   function onChange(value) {
-    console.log("Captcha value:", value);
     setRecaptchaToken(value || ""); // Set token to send to backend
   }
   const onSubmit = async (data) => {
@@ -81,6 +80,7 @@ const Login = () => {
       console.log(error.response?.data?.error);
       alert(error.response?.data?.error || "OTP verification failed");
     }
+    refetch();
   };
 
   return (
@@ -143,7 +143,7 @@ const Login = () => {
                 type="submit"
                 className={`${
                   loading && "bg-[#8e2f5d]"
-                } bg-primary flex items-center gap-2 text-white font-semibold text-lg rounded-full w-full py-3 hover:bg-[#75244b]`}
+                } bg-primary flex items-center justify-center gap-2 text-white font-semibold text-lg rounded-full w-full py-3 hover:bg-[#75244b]`}
               >
                 Log In
                 {loading && <Loader className="animate-spin" />}

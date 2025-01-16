@@ -1,9 +1,12 @@
 import { Navigate, useLocation } from "react-router-dom";
 import useLoggedInUser from "../hooks/useLoggedInUser";
 import PropTypes from "prop-types";
+import { useCookie } from "../hooks/useCookie";
 
 const PrivateRoute = ({ children }) => {
   const { user, loading } = useLoggedInUser()
+  const { getCookie } = useCookie({ key: "Token", days: 7 });
+    const token = getCookie();
   const location = useLocation();
 
   if (loading) {
@@ -21,7 +24,7 @@ const PrivateRoute = ({ children }) => {
     );
   }
 
-  if (user) {
+  if (user && token) {
     return children;
   }
 

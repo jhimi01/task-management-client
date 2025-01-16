@@ -2,15 +2,28 @@ import { CircleUserRound, Info, LogOut, Search, X } from "lucide-react";
 import { Link, useLocation } from "react-router-dom";
 import useLoggedInUser from "../../hooks/useLoggedInUser";
 import { useCookie } from "../../hooks/useCookie";
+import axios from "axios";
 
 const Navbar = () => {
-  const { user } = useLoggedInUser();
+  const { user, refetch } = useLoggedInUser();
 
-  const { getCookie } = useCookie({ key: "Token", days: 7 });
+  const { getCookie, removeCookie } = useCookie({ key: "Token", days: 7 });
   const token = getCookie();
-  console.log(user);
   const { pathname } = useLocation();
-  console.log(pathname);
+
+  const handleLogout = async () => {
+    try {
+      await axios.delete("http://localhost:5000/api/auth/logout", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      removeCookie();
+      refetch();
+      window.location.reload();
+    } catch (err) {
+      console.log(err);
+    }
+    refetch();
+  };
 
   return (
     <nav
@@ -87,7 +100,10 @@ const Navbar = () => {
                   {/* <CircleUserRound /> */}
                 </Link>
                 <div className="flex gap-2">
-                  <button className="flex items-center gap-1">
+                  <button
+                    onClick={handleLogout}
+                    className="flex items-center gap-1"
+                  >
                     Logout <LogOut />
                   </button>
                 </div>
