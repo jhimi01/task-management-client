@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Eye, EyeClosed, Loader } from "lucide-react";
 import LoginGoogle from "../../components/LoginGoogle";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 
 const SignUp = () => {
   const {
@@ -26,7 +27,7 @@ const SignUp = () => {
       email: data.email,
       password: data.password,
       nid: data.nid,
-      address: data.address, //---------
+      address: data.address,
       mobileNumber: data.mobileNumber,
       gender: data.gender,
       title: data.title,
@@ -46,15 +47,36 @@ const SignUp = () => {
         "http://localhost:5000/api/auth/signup",
         newUser
       );
-      console.log("this is a response data", response.data); // Check the structure of response data
+      console.log("this is a response data", response.data);
       if (response.status === 200) {
         setLoading(false);
-        alert("OTP sent to your email");
-        setShowOTP(true); // Show OTP input form
+        toast.success("OTP sent to your email", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+        setShowOTP(true);
       }
+      toast.success("OTP sent to your email", {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
       setEmail(data.email);
 
-      console.log("this is a data", response); // Log the full response for debugging
+      console.log("this is a data", response);
     } catch (error) {
       setLoading(false);
       alert("An error occurred", error.message);
@@ -67,7 +89,7 @@ const SignUp = () => {
 
   const handleVerifyOTP = async (e) => {
     setLoading(true);
-    e.preventDefault(); // Prevent default form submission
+    e.preventDefault();
     try {
       const response = await axios.post(
         "http://localhost:5000/api/auth/verify-otp",
@@ -76,9 +98,18 @@ const SignUp = () => {
       console.log("otttttttttp", response);
       if (response.status === 200) {
         setLoading(false);
-        alert("User verified successfully");
+        toast.success("User verified successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
         navigate("/login");
-        // Redirect or show the next page
       }
     } catch (error) {
       setLoading(false);
@@ -107,13 +138,6 @@ const SignUp = () => {
                   <h1 className="text-primary text-lg">
                     Create an account using
                   </h1>
-                  {/* <button className="hover:bg-gray-300 rounded-md p-1">
-                    <img
-                      src="https://storage.googleapis.com/libraries-lib-production/images/GoogleLogo-canvas-404-300px.original.png"
-                      alt="google icon"
-                      className="h-14 w-14"
-                    />
-                  </button> */}
                   <div className="my-3 w-36">
                     <LoginGoogle />
                   </div>
@@ -411,6 +435,19 @@ const SignUp = () => {
           </div>
         </div>
       </div>
+      <ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
     </div>
   );
 };

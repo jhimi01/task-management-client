@@ -27,7 +27,7 @@ const Login = () => {
   const navigate = useNavigate();
 
   function onChange(value) {
-    setRecaptchaToken(value || ""); // Set token to send to backend
+    setRecaptchaToken(value || "");
   }
   const onSubmit = async (data) => {
     setLoading(true);
@@ -45,13 +45,33 @@ const Login = () => {
 
       if (response.status === 200) {
         setLoading(false);
-        alert(response.data.message); // Show OTP sent message
-        setShowOTP(true); // Show OTP input form
+        toast.success(response.data.message, {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+        setShowOTP(true);
       }
       refetch();
     } catch (error) {
       setLoading(false);
-      alert(error.response?.data?.error || "Something went wrong");
+      toast.error(error.response?.data?.error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
   };
 
@@ -60,7 +80,7 @@ const Login = () => {
       const response = await axios.post(
         "http://localhost:5000/api/auth/verify-otp-login",
         {
-          email: email, // Remember to pass the email from state
+          email: email,
           otp,
         }
       );
@@ -72,8 +92,8 @@ const Login = () => {
         console.log("this is userdata", userData);
         setCookie(token);
         navigate("/");
-        toast("🦄 Wow so easy!", {
-          position: "top-center",
+        toast.success("🦄 Logged in successfully", {
+          position: "top-right",
           autoClose: 5000,
           hideProgressBar: false,
           closeOnClick: false,
@@ -83,15 +103,22 @@ const Login = () => {
           theme: "light",
           transition: Bounce,
         });
-        // Optionally store user data in local storage/session or state
-        alert("Logged in successfully");
         refetch();
-        // navigate("/"); // Navigate to the home page
       }
       refetch();
     } catch (error) {
       console.log(error.response?.data?.error);
-      alert(error.response?.data?.error || "OTP verification failed");
+      toast.error(error.response?.data?.error, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+        });
     }
     refetch();
   };
@@ -201,13 +228,6 @@ const Login = () => {
             <p>or</p>
             <div className="w-full h-[1px] bg-slate-700"></div>
           </div>
-          {/* <button className="hover:bg-gray-300 rounded-full bg-gray-200 w-full py-1 flex justify-center items-center">
-            <img
-              src="https://storage.googleapis.com/libraries-lib-production/images/GoogleLogo-canvas-404-300px.original.png"
-              alt="google icon"
-              className="h-14 w-14"
-            />
-          </button> */}
           <LoginGoogle />
           <div className="text-primary text-lg mt-5 text-center cursor-pointer">
             <Link to="/signup">
@@ -216,8 +236,8 @@ const Login = () => {
           </div>
         </div>
         <ToastContainer
-          position="top-center"
-          autoClose={5000}
+          position="top-right"
+          autoClose={4000}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick={false}

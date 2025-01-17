@@ -48,6 +48,7 @@ const ResetPasswordModal = ({ isOpen, onClose, onSave }) => {
           </label>
           <input
             id="newPassword"
+            max={6}
             type={showPass ? "password" : "text"}
             className="w-full p-2 border border-gray-300 rounded mt-2"
             value={newPassword}
@@ -68,6 +69,7 @@ const ResetPasswordModal = ({ isOpen, onClose, onSave }) => {
           </label>
           <input
             id="confirmPassword"
+            max={6}
             type={newPass ? "password" : "text"}
             className="w-full p-2 border border-gray-300 rounded mt-2"
             value={confirmPassword}

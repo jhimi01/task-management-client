@@ -7,6 +7,7 @@ import ImageUpload from "../../components/ImageUpload";
 import ResetPasswordModal from "../../components/ResetPasswordModal";
 import { useCookie } from "../../hooks/useCookie";
 import axios from "axios";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 
 const ProfilePage = () => {
   const { user, loading, error, refetch } = useLoggedInUser();
@@ -63,13 +64,26 @@ const ProfilePage = () => {
         }
       );
 
-      const { token: newToken } = response.data; // Renaming `token` to `newToken`
-      setCookie(newToken); // Update the token in the cookie
+      if (response.status === 200) {
+        toast.success("🦄 reseted password successfully", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+        });
+        const { token: newToken } = response.data; // Renaming `token` to `newToken`
+        setCookie(newToken); // Update the token in the cookie
+      }
 
       if (response.data.error) {
         alert(response.data.error);
       } else {
-        alert(response.data.message); // Success message
+        // alert(response.data.message); // Success message
         setIsResetPasswordModalOpen(false); // Close modal after success
       }
     } catch (error) {
@@ -192,6 +206,19 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={4000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
 
       {/* Modal */}
       <EditProfileModal

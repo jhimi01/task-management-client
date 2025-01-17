@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
-import { useCookie } from './useCookie';
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { useCookie } from "./useCookie";
 
 export default function useLoggedInUser() {
   const [user, setUser] = useState(null); // user data
@@ -8,8 +8,9 @@ export default function useLoggedInUser() {
   const [error, setError] = useState(null); // error handling
   const [refetch, setRefetch] = useState(false); // refetch state
   const { getCookie } = useCookie({ key: "Token", days: 7 });
-  const token = getCookie()
-  
+  const token = getCookie();
+
+  console.log(token == undefined)
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -17,17 +18,20 @@ export default function useLoggedInUser() {
       setError(null); // clear previous errors
 
       try {
-        if (!token) throw new Error('No token found');
+        if (!token) throw new Error("No token found");
 
-        const response = await axios.get('http://localhost:5000/api/auth/loggedin-user', {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await axios.get(
+          "http://localhost:5000/api/auth/loggedin-user",
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
 
         setUser(response.data); // set user data
       } catch (err) {
-        setError(err.message || 'An error occurred while fetching user data');
+        setError(err.message || "An error occurred while fetching user data");
       } finally {
         setLoading(false); // finish loading
       }

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useCookie } from "../hooks/useCookie";
 import PropTypes from "prop-types";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 
 const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
   const [formData, setFormData] = useState(userData);
@@ -36,11 +37,24 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
           body: JSON.stringify(formData),
         }
       );
+      if(response.ok){
+        toast.success("updated", {
+          position: "top-right",
+          autoClose: 5000,
+          hideProgressBar: false,
+          closeOnClick: false,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          transition: Bounce,
+          });
+      }
       const result = await response.json();
       if (!response.ok) {
         throw new Error(result.message || "Something went wrong");
       }
-
+    
       setLoading(false);
       onSave(formData);
       onClose();
@@ -259,6 +273,19 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
     </div>
   );
 };
+<ToastContainer
+          position="top-right"
+          autoClose={3000}
+          hideProgressBar={false}
+          newestOnTop={false}
+          closeOnClick={false}
+          rtl={false}
+          pauseOnFocusLoss
+          draggable
+          pauseOnHover
+          theme="light"
+          transition={Bounce}
+        />
 
 EditProfileModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,

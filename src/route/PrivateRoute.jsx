@@ -2,11 +2,12 @@ import { Navigate, useLocation } from "react-router-dom";
 import useLoggedInUser from "../hooks/useLoggedInUser";
 import PropTypes from "prop-types";
 import { useCookie } from "../hooks/useCookie";
+import { Loader } from "lucide-react";
 
 const PrivateRoute = ({ children }) => {
-  const { user, loading } = useLoggedInUser()
+  const { user, loading } = useLoggedInUser();
   const { getCookie } = useCookie({ key: "Token", days: 7 });
-    const token = getCookie();
+  const token = getCookie();
   const location = useLocation();
 
   if (loading) {
@@ -19,7 +20,8 @@ const PrivateRoute = ({ children }) => {
           height: "55vh",
         }}
       >
-        <progress className="progress w-3/4"></progress>
+        {/* <progress className="progress w-3/4"></progress> */}
+        <div className="flex items-center gap-2">Loading... <Loader className="animate-spin" /></div>
       </div>
     );
   }
@@ -36,5 +38,3 @@ PrivateRoute.propTypes = {
 };
 
 export default PrivateRoute;
-
-// export default PrivateRoute
