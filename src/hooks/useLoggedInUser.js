@@ -9,14 +9,10 @@ export default function useLoggedInUser() {
   const [refetch, setRefetch] = useState(false); // refetch state
   const { getCookie } = useCookie({ key: "Token", days: 7 });
   const token = getCookie();
-
-  console.log(token == undefined)
-
   useEffect(() => {
     const fetchUserData = async () => {
-      setLoading(true); // start loading
-      setError(null); // clear previous errors
-
+      setLoading(true);
+      setError(null); 
       try {
         if (!token) throw new Error("No token found");
 
