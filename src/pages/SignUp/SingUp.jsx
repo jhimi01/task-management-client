@@ -63,17 +63,6 @@ const SignUp = () => {
           });
         setShowOTP(true);
       }
-      toast.success("OTP sent to your email", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-        });
       setEmail(data.email);
 
       console.log("this is a data", response);
