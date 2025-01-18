@@ -2,11 +2,11 @@ import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import { useNavigate } from "react-router";
 import { useCookie } from "../hooks/useCookie";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 
 const LoginGoogle = () => {
-
   const navigate = useNavigate();
-   const { setCookie } = useCookie({ key: "Token", days: 7 });
+  const { setCookie } = useCookie({ key: "Token", days: 7 });
   const login = useGoogleLogin({
     onSuccess: async (response) => {
       try {
@@ -38,10 +38,20 @@ const LoginGoogle = () => {
               userData
             );
             if (res.status === 200) {
-              alert("logged in successfully");
+              toast.success("OTP sent to your email", {
+                position: "top-right",
+                autoClose: 5000,
+                hideProgressBar: false,
+                closeOnClick: false,
+                pauseOnHover: true,
+                draggable: true,
+                progress: undefined,
+                theme: "light",
+                transition: Bounce,
+              });
               navigate("/profile");
-              console.log(res.data.token)
-              setCookie(res.data.token)
+              console.log(res.data.token);
+              setCookie(res.data.token);
             }
           }
         }
@@ -63,6 +73,19 @@ const LoginGoogle = () => {
         src="https://storage.googleapis.com/libraries-lib-production/images/GoogleLogo-canvas-404-300px.original.png"
         alt="google icon"
         className="h-14 w-14"
+      />
+      <ToastContainer
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
       />
     </button>
   );

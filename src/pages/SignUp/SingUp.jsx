@@ -60,7 +60,7 @@ const SignUp = () => {
           progress: undefined,
           theme: "light",
           transition: Bounce,
-          });
+        });
         setShowOTP(true);
       }
       setEmail(data.email);
@@ -68,7 +68,17 @@ const SignUp = () => {
       console.log("this is a data", response);
     } catch (error) {
       setLoading(false);
-      alert("An error occurred", error.message);
+      toast.error("An error User email already exists", error.message, {
+        position: "top-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: false,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "light",
+        transition: Bounce,
+      });
       console.error(
         "Error:",
         error.response ? error.response.data : error.message
@@ -97,7 +107,7 @@ const SignUp = () => {
           progress: undefined,
           theme: "light",
           transition: Bounce,
-          });
+        });
         navigate("/login");
       }
     } catch (error) {
@@ -425,18 +435,18 @@ const SignUp = () => {
         </div>
       </div>
       <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          transition={Bounce}
-        />
+        position="top-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick={false}
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+        transition={Bounce}
+      />
     </div>
   );
 };

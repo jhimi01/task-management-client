@@ -10,8 +10,6 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
   const { getCookie } = useCookie({ key: "Token", days: 7 });
   const token = getCookie();
 
-  console.log("iddddddd", formData?.loggedInUser?.id);
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData((prevData) => ({

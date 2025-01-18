@@ -4,38 +4,40 @@ import useLoggedInUser from "../hooks/useLoggedInUser";
 import { Loader } from "lucide-react";
 import PropTypes from "prop-types";
 
+const PrivateLoginandSignRoute = ({ children }) => {
+  const { user, loading } = useLoggedInUser();
+  const { getCookie } = useCookie({ key: "Token", days: 7 });
+  const token = getCookie();
+  const location = useLocation();
 
-const PrivateLoginandSignRoute = ({children}) => {
-    const { user, loading } = useLoggedInUser();
-    const { getCookie } = useCookie({ key: "Token", days: 7 });
-    const token = getCookie();
-    const location = useLocation();
-  
-    if (loading) {
-      return (
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            height: "55vh",
-          }}
-        >
-          {/* <progress className="progress w-3/4"></progress> */}
-          <div className="flex items-center gap-2">Loading... <Loader className="animate-spin" /></div>
+  if (loading) {
+    return (
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          height: "55vh",
+        }}
+      >
+        <div className="flex items-center gap-2">
+          Loading... <Loader className="animate-spin" />
         </div>
-      );
-    }
-  
-    if (!user && !token) {
-      return children;
-    }
-  
-    return <Navigate to="/" state={{ from: location }} replace />;
-  };
-  
-  PrivateLoginandSignRoute.propTypes = {
-    children: PropTypes.func.isRequired,
-}
+      </div>
+    );
+  }
 
-export default PrivateLoginandSignRoute
+  if (user && token) {
+    // If user is logged in, redirect to home page
+    return <Navigate to="/" state={{ from: location }} replace />;
+  }
+
+  // If user is not logged in, allow access to login/signup page
+  return children;
+};
+
+PrivateLoginandSignRoute.propTypes = {
+  children: PropTypes.element.isRequired,
+};
+
+export default PrivateLoginandSignRoute;
