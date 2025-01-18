@@ -37,7 +37,7 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
           body: JSON.stringify(formData),
         }
       );
-      if(response.ok){
+      if (response.ok) {
         toast.success("updated", {
           position: "top-right",
           autoClose: 5000,
@@ -48,13 +48,13 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
           progress: undefined,
           theme: "light",
           transition: Bounce,
-          });
+        });
       }
       const result = await response.json();
       if (!response.ok) {
         throw new Error(result.message || "Something went wrong");
       }
-    
+
       setLoading(false);
       onSave(formData);
       onClose();
@@ -274,18 +274,18 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
   );
 };
 <ToastContainer
-          position="top-right"
-          autoClose={3000}
-          hideProgressBar={false}
-          newestOnTop={false}
-          closeOnClick={false}
-          rtl={false}
-          pauseOnFocusLoss
-          draggable
-          pauseOnHover
-          theme="light"
-          transition={Bounce}
-        />
+  position="top-right"
+  autoClose={3000}
+  hideProgressBar={false}
+  newestOnTop={false}
+  closeOnClick={false}
+  rtl={false}
+  pauseOnFocusLoss
+  draggable
+  pauseOnHover
+  theme="light"
+  transition={Bounce}
+/>;
 
 EditProfileModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,

@@ -5,9 +5,9 @@ import EditProfileModal from "../../components/EditProfileModal";
 import { format } from "date-fns";
 import ImageUpload from "../../components/ImageUpload";
 import ResetPasswordModal from "../../components/ResetPasswordModal";
+import { Bounce, toast, ToastContainer } from "react-toastify";
 import { useCookie } from "../../hooks/useCookie";
 import axios from "axios";
-import { Bounce, toast, ToastContainer } from "react-toastify";
 
 const ProfilePage = () => {
   const { user, loading, error, refetch } = useLoggedInUser();
@@ -17,9 +17,8 @@ const ProfilePage = () => {
   const { getCookie, setCookie } = useCookie({ key: "Token", days: 7 });
   const token = getCookie();
 
-  const handleEditClick = () => {
-    setIsModalOpen(true);
-  };
+  const handleEditClick = () => setIsModalOpen(true);
+  const handleResetPasswordClick = () => setIsResetPasswordModalOpen(true);
 
   const handleImageChange = (newImageUrl) => {
     refetch();
@@ -31,16 +30,6 @@ const ProfilePage = () => {
     console.log("Saved data:", updatedData);
   };
 
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error}</p>;
-
-  console.log("gender", user?.userData?.gender);
-
-  // reset password
-  const handleResetPasswordClick = () => {
-    setIsResetPasswordModalOpen(true);
-  };
-
   const handleResetPasswordSave = async ({ oldPassword, newPassword }) => {
     if (!token) {
       alert("No token found. Please login again.");
@@ -48,9 +37,8 @@ const ProfilePage = () => {
     }
 
     try {
-      // Sending reset password request with Axios
       const response = await axios.post(
-        "http://localhost:5000/api/auth/reset-password", // Your backend endpoint
+        "http://localhost:5000/api/auth/reset-password",
         {
           email: user?.userData?.email,
           oldPassword,
@@ -59,45 +47,44 @@ const ProfilePage = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // Include the token in Authorization header
+            Authorization: `Bearer ${token}`,
           },
         }
       );
 
       if (response.status === 200) {
-        toast.success("🦄 reseted password successfully", {
+        toast.success("Password reset successfully!", {
           position: "top-right",
-          autoClose: 5000,
+          autoClose: 4000,
           hideProgressBar: false,
           closeOnClick: false,
           pauseOnHover: true,
           draggable: true,
-          progress: undefined,
-          theme: "light",
           transition: Bounce,
         });
-        const { token: newToken } = response.data; // Renaming `token` to `newToken`
-        setCookie(newToken); // Update the token in the cookie
-      }
-
-      if (response.data.error) {
-        alert(response.data.error);
+        const { token: newToken } = response.data;
+        setCookie(newToken);
+        setIsResetPasswordModalOpen(false);
       } else {
-        // alert(response.data.message); // Success message
-        setIsResetPasswordModalOpen(false); // Close modal after success
+        alert(response.data.error || "Unknown error occurred.");
       }
     } catch (error) {
       console.error("Error:", error);
-      alert("An error occurred while resetting the password.");
+      alert(
+        "An error occurred while resetting the password. Please try again."
+      );
     }
   };
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error}</p>;
 
   return (
     <div className="bg-gray-200">
       <div className="wrapper">
         <div className="mt-10 p-4">
           <div className="flex gap-4">
-            {/* 1st section */}
+            {/* Left Section */}
             <div className="w-[30%] space-y-3 p-4 bg-white mx-auto text-center">
               <div className="group mx-auto relative w-40">
                 <img
@@ -114,7 +101,6 @@ const ProfilePage = () => {
                   <ImageUpload onChange={handleImageChange} />
                 </div>
               </div>
-
               <div className="text-slate-800">
                 <h1 className="text-xl font-semibold capitalize">
                   {user.userData?.firstName} {user.userData?.lastName}
@@ -128,63 +114,39 @@ const ProfilePage = () => {
               </p>
             </div>
 
+            {/* Right Section */}
             <div className="w-[80%] p-4 bg-white mx-auto">
-              {/* Table to display user data */}
               <table className="min-w-full table-auto">
-                <thead>
-                  <tr>
-                    <th className="text-left p-2"></th>
-                    <th className="text-left p-2"></th>
-                  </tr>
-                </thead>
                 <tbody>
-                  {/* name */}
-                  <tr className="border-b">
-                    <td className="p-2 font-semibold">Name:</td>
-                    <td className="p-2">
-                      {user.userData?.firstName} {user.userData?.lastName}
-                    </td>
-                  </tr>
-                  {/* mobileNumber */}
-                  <tr>
-                    <td className="p-2 font-semibold">Mobile Number:</td>
-                    <td className="p-2">{user.userData?.mobileNumber}</td>
-                  </tr>
-                  {/* date of birth */}
-                  <tr className="border-t">
-                    <td className="p-2 font-semibold">Date of Birth:</td>
-                    <td className="p-2">
-                      {format(
+                  {[
+                    [
+                      "Name:",
+                      `${user.userData?.firstName} ${user.userData?.lastName}`,
+                    ],
+                    ["Mobile Number:", user.userData?.mobileNumber],
+                    [
+                      "Date of Birth:",
+                      format(
                         new Date(user.userData?.dateOfBirth),
                         "MMMM dd, yyyy"
-                      )}{" "}
-                    </td>
-                  </tr>
-                  {/* gender */}
-                  <tr className="border-t">
-                    <td className="p-2 font-semibold">Gender:</td>
-                    <td className="p-2">{user.userData?.gender}</td>
-                  </tr>
-                  {/* nid */}
-                  <tr className="border-t">
-                    <td className="p-2 font-semibold">NID:</td>
-                    <td className="p-2">{user.userData?.nid}</td>
-                  </tr>
-                  {/* createdAt */}
-                  <tr className="border-t">
-                    <td className="p-2 font-semibold">Created Account:</td>
-                    <td className="p-2">
-                      {format(
+                      ),
+                    ],
+                    ["Gender:", user.userData?.gender],
+                    ["NID:", user.userData?.nid],
+                    [
+                      "Created Account:",
+                      format(
                         new Date(user.userData?.createdAt),
                         "MMMM dd, yyyy"
-                      )}
-                    </td>
-                  </tr>
-
-                  <tr className="border-y">
-                    <td className="p-2 font-semibold">Country:</td>
-                    <td className="p-2">{user.userData?.country}</td>
-                  </tr>
+                      ),
+                    ],
+                    ["Country:", user.userData?.country],
+                  ].map(([label, value]) => (
+                    <tr key={label} className="border-b">
+                      <td className="p-2 font-semibold">{label}</td>
+                      <td className="p-2">{value}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </table>
 
@@ -206,39 +168,20 @@ const ProfilePage = () => {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={4000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Bounce}
-      />
+      <ToastContainer />
 
-      {/* Modal */}
+      {/* Modals */}
       <EditProfileModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         userData={user.userData}
         onSave={handleSave}
       />
-
-      {/* Reset Password */}
       <ResetPasswordModal
         isOpen={isResetPasswordModalOpen}
         onClose={() => setIsResetPasswordModalOpen(false)}
-        onSave={handleResetPasswordSave} // Passing the function here
-      />
-      {/* <ResetPasswordModal
-        isOpen={isResetPasswordModalOpen}
-        onClose={() => setIsResetPasswordModalOpen(false)}
         onSave={handleResetPasswordSave}
-      /> */}
+      />
     </div>
   );
 };
