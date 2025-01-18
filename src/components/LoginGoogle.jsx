@@ -1,17 +1,12 @@
 import { useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import { useState } from "react";
+import { useNavigate } from "react-router";
+import { useCookie } from "../hooks/useCookie";
 
 const LoginGoogle = () => {
-  const [googleData, setGoogleData] = useState()
-  console.log("googledata", googleData)
-  const userData = {
-    email: googleData?.email,
-    firstName: googleData?.name,
-    img: googleData?.picture,
-    isVerified: googleData?.email_verified
-  }
-  console.log("user data", userData)
+
+  const navigate = useNavigate();
+   const { setCookie } = useCookie({ key: "Token", days: 7 });
   const login = useGoogleLogin({
     onSuccess: async (response) => {
       try {
@@ -21,15 +16,44 @@ const LoginGoogle = () => {
             headers: { Authorization: `Bearer ${response.access_token}` },
           }
         );
-        if(res.status === 200){
-          setGoogleData(res.data)
+
+        if (res.status === 200) {
+          const userData = {
+            email: res.data.email,
+            firstName: res.data.name,
+            img: res.data.picture,
+            isVerified: res.data.email_verified,
+          };
+
+          // Post data to backend
+          const response = await axios.post(
+            "http://localhost:5000/api/auth/google-signup",
+            userData
+          );
+
+          if (response.status === 200) {
+            console.log(response);
+            const res = await axios.post(
+              "http://localhost:5000/api/auth/google-login",
+              userData
+            );
+            if (res.status === 200) {
+              alert("logged in successfully");
+              navigate("/profile");
+              console.log(res.data.token)
+              setCookie(res.data.token)
+            }
+          }
         }
-        console.log(res.data);
       } catch (err) {
-        console.log(err);
+        console.log("Error during Google login:", err);
       }
     },
+    onError: (err) => {
+      console.log("Google login error:", err);
+    },
   });
+
   return (
     <button
       className="hover:bg-gray-300 rounded-full bg-gray-200 w-full py-1 flex justify-center items-center"
@@ -43,4 +67,5 @@ const LoginGoogle = () => {
     </button>
   );
 };
+
 export default LoginGoogle;

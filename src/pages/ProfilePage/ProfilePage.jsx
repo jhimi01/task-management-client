@@ -76,8 +76,14 @@ const ProfilePage = () => {
     }
   };
 
+  console.log(
+    "type",
+    user?.userData?.lastName === null || user?.userData?.lastName == ""
+  );
+
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error}</p>;
+  console.log(user?.userData.nid);
 
   return (
     <div className="bg-gray-200">
@@ -103,8 +109,9 @@ const ProfilePage = () => {
               </div>
               <div className="text-slate-800">
                 <h1 className="text-xl font-semibold capitalize">
-                  {user.userData?.firstName} {user.userData?.lastName}
+                  {user.userData?.firstName} {user?.userData?.lastName}
                 </h1>
+
                 <p>{user.userData?.title}</p>
                 <p className="text-xs">{user.userData?.address}</p>
               </div>
@@ -121,7 +128,11 @@ const ProfilePage = () => {
                   {[
                     [
                       "Name:",
-                      `${user.userData?.firstName} ${user.userData?.lastName}`,
+                      `${user.userData?.firstName} ${
+                        user.userData?.lastName === null
+                          ? ""
+                          : user.userData?.lastName
+                      }`,
                     ],
                     ["Mobile Number:", user.userData?.mobileNumber],
                     [
@@ -144,7 +155,7 @@ const ProfilePage = () => {
                   ].map(([label, value]) => (
                     <tr key={label} className="border-b">
                       <td className="p-2 font-semibold">{label}</td>
-                      <td className="p-2">{value}</td>
+                      <td className="p-2 capitalize">{value}</td>
                     </tr>
                   ))}
                 </tbody>
