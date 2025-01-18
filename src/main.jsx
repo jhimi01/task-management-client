@@ -9,6 +9,7 @@ import Login from "./pages/Login/Login";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
 import PrivateRoute from "./route/PrivateRoute";
 import { GoogleOAuthProvider } from "@react-oauth/google";
+import ForgetPassword from "./pages/ForgetPasswordPage/ForgetPassword";
 
 const router = createBrowserRouter([
   {
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <Login />,
+      },
+      {
+        path: "/forgot-password",
+        element: <ForgetPassword />,
       },
       {
         path: "/profile",

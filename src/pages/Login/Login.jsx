@@ -55,7 +55,7 @@ const Login = () => {
           progress: undefined,
           theme: "light",
           transition: Bounce,
-          });
+        });
         setShowOTP(true);
       }
       refetch();
@@ -71,7 +71,7 @@ const Login = () => {
         progress: undefined,
         theme: "light",
         transition: Bounce,
-        });
+      });
     }
   };
 
@@ -118,7 +118,7 @@ const Login = () => {
         progress: undefined,
         theme: "light",
         transition: Bounce,
-        });
+      });
     }
     refetch();
   };

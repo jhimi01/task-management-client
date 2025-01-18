@@ -8,8 +8,20 @@ const ResetPasswordModal = ({ isOpen, onClose, onSave }) => {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [newPass, setNewPass] = useState(true);
   const [showPass, setShowPass] = useState(true);
+  const [error, setError] = useState("");
 
   const handleSave = () => {
+    if (newPassword.length < 6) {
+      setError("Password must be at least 6 characters long");
+      return;
+    }
+
+    // Validate that new password and confirmation match
+    if (newPassword !== confirmPassword) {
+      setError("New password and confirmation do not match");
+      return;
+    }
+
     if (newPassword !== confirmPassword) {
       alert("New password and confirmation do not match");
       return;
@@ -28,7 +40,8 @@ const ResetPasswordModal = ({ isOpen, onClose, onSave }) => {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded shadow-lg w-96 space-y-3">
         <h2 className="text-xl font-semibold">Reset Password</h2>
-
+        {/* Display error message */}
+        {error && <p className="text-red-500 text-sm">{error}</p>}
         <div>
           <label htmlFor="oldPassword" className="block">
             Old Password
