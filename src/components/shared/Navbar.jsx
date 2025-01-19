@@ -49,7 +49,7 @@ const Navbar = () => {
         </div>
       </div>
       <div className="wrapper shadow-inner">
-        <div className="flex justify-between items-center ">
+        <div className="md:flex justify-between items-center ">
           {/* logo */}
           <div className="text-2xl font-bold">
             <Link to="/">

@@ -38,7 +38,7 @@ const ProfilePage = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/reset-password",
+        "http://localhost:5000/api/auth/change-password",
         {
           email: user?.userData?.email,
           oldPassword,
@@ -165,7 +165,7 @@ const ProfilePage = () => {
                 className="text-sm text-blue-800 underline cursor-pointer my-4"
                 onClick={handleResetPasswordClick}
               >
-                Reset Password
+              Change Password
               </div>
               <div className="mt-4">
                 <button

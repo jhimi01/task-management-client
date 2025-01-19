@@ -11,6 +11,7 @@ import PrivateRoute from "./route/PrivateRoute";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import ForgetPassword from "./pages/ForgetPasswordPage/ForgetPassword";
 import PrivateLoginandSignRoute from "./route/PrivateLoginandSignRoute";
+import SendEmail from "./pages/SendEmailPage/SendEmail";
 
 const router = createBrowserRouter([
   {
@@ -23,14 +24,26 @@ const router = createBrowserRouter([
       },
       {
         path: "/signup",
-        element: <PrivateLoginandSignRoute><SingUp /></PrivateLoginandSignRoute>,
+        element: (
+          <PrivateLoginandSignRoute>
+            <SingUp />
+          </PrivateLoginandSignRoute>
+        ),
       },
       {
         path: "/login",
-        element: <PrivateLoginandSignRoute><Login /></PrivateLoginandSignRoute>,
+        element: (
+          <PrivateLoginandSignRoute>
+            <Login />
+          </PrivateLoginandSignRoute>
+        ),
       },
       {
-        path: "/forgot-password",
+        path: "/send-email",
+        element: <SendEmail />,
+      },
+      {
+        path: "/forgot-password/:id/:token",
         element: <ForgetPassword />,
       },
       {

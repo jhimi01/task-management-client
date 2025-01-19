@@ -20,7 +20,7 @@ const ForgetPassword = () => {
     <div className="bg-gray-200 h-screen">
       <div className="pt-20">
         <div className="bg-white w-11/12 md:w-[40%] mx-auto space-y-4 rounded-sm px-6 pt-10 pb-5">
-          <h3 className="text-4xl text-center">Forget Password</h3>
+          <h3 className="text-4xl text-center">Reset Password</h3>
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
             <div className="space-y-4">
               {/* new password */}
@@ -93,7 +93,7 @@ const ForgetPassword = () => {
                 loading && "bg-[#8e2f5d]"
               } bg-primary flex items-center justify-center gap-2 text-white font-semibold text-lg rounded-full w-full py-3 hover:bg-[#75244b]`}
             >
-              Log In
+              Save Password
               {loading && <Loader className="animate-spin" />}
             </button>
           </form>
