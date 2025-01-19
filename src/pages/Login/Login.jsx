@@ -178,7 +178,7 @@ const Login = () => {
                 sitekey="6LchN7gqAAAAAN1x37YAX0nhMkvuta3w_0ZiRElH"
                 onChange={onChange}
               />
-              <Link to="/forgot-password"><div><h4 className="text-xl underline text-primary cursor-pointer">Forget Password</h4></div></Link>
+              <Link to="/send-email"><div><h4 className="text-xl underline text-primary cursor-pointer">Forget Password</h4></div></Link>
               <button
                 disabled={loading}
                 type="submit"
