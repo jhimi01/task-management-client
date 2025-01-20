@@ -90,6 +90,9 @@ const Login = () => {
       if (response.status === 200) {
         const { token, userData } = response.data;
         console.log("this is userdata", userData);
+        if (!token || token ===null || token === undefined) {
+          return;
+        }
         setCookie(token);
         navigate("/");
         toast.success("🦄 Logged in successfully", {

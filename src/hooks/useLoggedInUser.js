@@ -14,7 +14,11 @@ export default function useLoggedInUser() {
       setLoading(true);
       setError(null); 
       try {
-        if (!token) throw new Error("No token found");
+        if (!token) {
+          console.info("No token found. Skipping fetch.");
+          setUser(null); // Ensure user is null if no token
+          return; // Exit early if no token
+        }
 
         const response = await axios.get(
           "http://localhost:5000/api/auth/loggedin-user",

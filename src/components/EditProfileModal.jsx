@@ -4,7 +4,18 @@ import PropTypes from "prop-types";
 import { Bounce, toast, ToastContainer } from "react-toastify";
 
 const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
-  const [formData, setFormData] = useState(userData);
+  const [formData, setFormData] = useState({
+    firstName: userData.firstName || "",
+    lastName: userData.lastName || "",
+    email: userData.email || "",
+    mobileNumber: userData.mobileNumber || "",
+    dateOfBirth: userData.dateOfBirth || "",
+    gender: userData.gender || "",
+    nid: userData.nid || "",
+    country: userData.country || "",
+    title: userData.title || "",
+    address: userData.address || "",
+  });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const { getCookie } = useCookie({ key: "Token", days: 7 });
@@ -288,8 +299,9 @@ const EditProfileModal = ({ isOpen, onClose, userData, onSave }) => {
 EditProfileModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  userData: PropTypes.func.isRequired,
+  userData: PropTypes.object.isRequired, // Ensure this matches the actual type
   onSave: PropTypes.func.isRequired,
 };
+
 
 export default EditProfileModal;
