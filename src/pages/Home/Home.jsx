@@ -1,19 +1,19 @@
 import BookingForm from "../../components/BookingForm";
-import { useCookie } from "../../hooks/useCookie";
+// import { useCookie } from "../../hooks/useCookie";
 
 const Home = () => {
-   const { getCookie } = useCookie({ key: "Token", days: 7 });
-    const token = getCookie();
-    console.log("token nnull", token === null )
-    console.log("token value", token )
-    console.log("token undefind", token === undefined)
-    console.log("token", !token)
+  //  const { getCookie } = useCookie({ key: "Token", days: 7 });
+  //   const token = getCookie();
+  //   console.log("token nnull", token === null )
+  //   console.log("token value", token )
+  //   console.log("token undefind", token == undefined)
+  //   console.log("token", !token)
 
-    if (!token) {
-      console.info("No token found, showing fallback UI or taking default actions.");
-    } else{
-      console.info("ther is a token")
-    }
+  //   if (!token) {
+  //     console.info("No token found, showing fallback UI or taking default actions.");
+  //   } else{
+  //     console.info("ther is a token")
+  //   }
   return (
     <>
       <div
