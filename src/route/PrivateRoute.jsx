@@ -1,16 +1,24 @@
 import { Navigate, useLocation } from "react-router-dom";
-import useLoggedInUser from "../hooks/useLoggedInUser";
+// import useLoggedInUser from "../hooks/useLoggedInUser";
 import PropTypes from "prop-types";
 import { useCookie } from "../hooks/useCookie";
 import { Loader } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchUserData } from "../features/auth/authSlice";
+import { useEffect } from "react";
+// import { Loader } from "lucide-react";
 
 const PrivateRoute = ({ children }) => {
-  const { user, loading } = useLoggedInUser();
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, [dispatch]);
+  const { isLoading, user } = useSelector((state) => state.auth);
   const { getCookie } = useCookie({ key: "Token", days: 7 });
   const token = getCookie();
   const location = useLocation();
 
-  if (loading) {
+  if (isLoading) {
     return (
       <div
         style={{
@@ -21,7 +29,9 @@ const PrivateRoute = ({ children }) => {
         }}
       >
         {/* <progress className="progress w-3/4"></progress> */}
-        <div className="flex items-center gap-2">Loading... <Loader className="animate-spin" /></div>
+        <div className="flex items-center gap-2">
+          Loading... <Loader className="animate-spin" />
+        </div>
       </div>
     );
   }

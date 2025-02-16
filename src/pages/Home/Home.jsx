@@ -1,61 +1,105 @@
-import BookingForm from "../../components/BookingForm";
-// import { useCookie } from "../../hooks/useCookie";
+import meetinging1 from "../../assets/meeting1.png";
+import time from "../../assets/time.png";
+import pending from "../../assets/pending.webp";
+import { ChevronRight } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from "react";
+import { fetchMyTasks } from "../../features/tasks/taskSlice";
+import { Link } from "react-router";
+import { fetchUserData } from "../../features/auth/authSlice";
+// import useLoggedInUser from "../../hooks/useLoggedInUser";
 
 const Home = () => {
-  //  const { getCookie } = useCookie({ key: "Token", days: 7 });
-  //   const token = getCookie();
-  //   console.log("token nnull", token === null )
-  //   console.log("token value", token )
-  //   console.log("token undefind", token == undefined)
-  //   console.log("token", !token)
+  const dispatch = useDispatch();
+  const { tasks, isLoading, error } = useSelector((state) => state.tasks);
 
-  //   if (!token) {
-  //     console.info("No token found, showing fallback UI or taking default actions.");
-  //   } else{
-  //     console.info("ther is a token")
-  //   }
+   const { user } = useSelector((state) => state.auth);
+   console.log(user);
+ 
+   useEffect(() => {
+     dispatch(fetchUserData());
+   }, [dispatch]);
+
+  useEffect(() => {
+    dispatch(fetchMyTasks());
+  }, [dispatch]);
+  const pendingTask = tasks?.filter((pending) => pending.status === "pending");
+  const completedTask = tasks?.filter(
+    (pending) => pending.status === "completed"
+  );
+  console.log("pending", pendingTask);
+  if (isLoading) return <p>Loading tasks...</p>;
+  if (error) return <p>Error: {error}</p>;
   return (
-    <>
-      <div
-        className="text-white relative  flex items-center pt-6"
-        style={{
-          backgroundImage: `linear-gradient(
-            to right, 
-            rgba(0, 0, 0, 0.7), 
-            rgba(0, 0, 0, 0.3) 40%, 
-            rgba(0, 0, 0, 0.1) 50%
-          ),
-          linear-gradient(
-              to bottom, 
-              rgba(0, 0, 0, 0.8), 
-              rgba(0, 0, 0, 0.4) 20%, 
-              rgba(0, 0, 0, 0.1) 25%
-            ),
-          url("https://www.qatarairways.com/content/dam/images/renditions/horizontal-1/campaigns/global/grsp-2025/dream-destinations/hn-dream-destination-city.jpg")`,
+    <div>
+      <div className="bg-gradient-to-r from-[#5c0931] to-[#ac2365] text-white md:px-10 px-5 md:py-0 py-4 items-center md:flex justify-between">
+        <div className="space-y-3">
+          <h2 className="text-5xl capitalize font-serif">
+            Hi, <span>{user?.userData?.name}</span>{" "}
+          </h2>
+          <p className="text-sm text-gray-200">
+            Checkout any completed project and recent project below
+          </p>
+        </div>
+        <img src={meetinging1} className="w-56 h-auto" />
+      </div>
 
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          height: "78vh",
-          width: "100%",
-        }}
-      >
-        {/* <div
-        className="absolute inset-0 bg-black opacity-50"
-      ></div> */}
-        <div className="wrapper space-y-8">
-          <h2 className="text-5xl">Dream destinations meet perfect offers</h2>
-          <p className="text-lg">Save up to 20%*</p>
-          <button className="border border-white hover:bg-white hover:text-black font-semibold rounded-full px-5 py-3">
-            Book now
-          </button>
+      <div className="grid mt-7 md:grid-cols-3 grid-cols-2 gap-2 md:gap-5">
+        <div className="md:flex items-center justify-between py-2 md:py-5 px-5 md:px-10 bg-white shadow-lg">
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold">{tasks?.length}</h2>
+            <p className="text-sm text-gray-500 mt-1">Total tasks</p>
+          </div>
+          <img
+            src={pending}
+            alt="tasks"
+            className="md:w-24 md:h-20 object-cover"
+          />
+        </div>
+        <div className="md:flex items-center py-2 md:py-5 px-5 md:px-10 justify-between bg-white shadow-lg">
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold">{pendingTask?.length}</h2>
+            <p className="text-sm text-gray-500 mt-1">Pending</p>
+          </div>
+          <img
+            src={meetinging1}
+            alt="tasks"
+            className="md:w-24 md:h-20 object-cover"
+          />
+        </div>
+        <div className="md:flex items-center py-2 md:py-5 px-5 md:px-10 justify-between bg-white shadow-lg">
+          <div className="text-center">
+            <h2 className="text-2xl font-semibold">{completedTask?.length}</h2>
+            <p className="text-sm text-gray-500 mt-1">Completed Tasks</p>
+          </div>
+          <img
+            src={time}
+            alt="tasks"
+            className="md:w-24 md:h-20 object-cover"
+          />
         </div>
       </div>
 
-      <div className="mb-20">
-        <BookingForm />
+      <div className="mt-10 group w-fit cursor-pointer">
+        <Link className="flex items-center gap-2" to="/my-tasks">
+          <h2 className="text-lg group-hover:text-xl duration-300">
+            Total Task
+          </h2>
+          <p className="text-sm flex group-hover:text-base duration-300 items-center">
+            view all <ChevronRight />
+          </p>
+        </Link>
       </div>
-    </>
+
+      <div className="group my-5 cursor-pointer w-fit">
+        <Link className="flex items-center gap-2" to="/add-task">
+          <h2 className="text-lg group-hover:text-xl duration-300">Add Task</h2>
+          <p className="text-sm flex items-center group-hover:text-base duration-300">
+            view form <ChevronRight />
+          </p>
+        </Link>
+      </div>
+    </div>
   );
 };
 

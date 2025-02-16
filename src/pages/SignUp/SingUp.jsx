@@ -3,8 +3,7 @@ import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Eye, EyeClosed, Loader } from "lucide-react";
-import LoginGoogle from "../../components/LoginGoogle";
-import { Bounce, toast, ToastContainer } from "react-toastify";
+import { Bounce, toast } from "react-toastify";
 
 const SignUp = () => {
   const {
@@ -26,15 +25,8 @@ const SignUp = () => {
     const newUser = {
       email: data.email,
       password: data.password,
-      nid: data.nid,
-      address: data.address,
-      mobileNumber: data.mobileNumber,
-      gender: data.gender,
-      title: data.title,
-      firstName: data.firstName,
-      lastName: data.lastName,
-      dateOfBirth: data.dateOfBirth,
-      country: data.country,
+      name: data.name,
+      userName: data.userName,
     };
     if (data.password !== data.retypePassword) {
       setLoading(false);
@@ -44,7 +36,7 @@ const SignUp = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/signup",
+        "http://localhost:5000/auth/register",
         newUser
       );
       console.log("this is a response data", response.data);
@@ -91,7 +83,7 @@ const SignUp = () => {
     e.preventDefault();
     try {
       const response = await axios.post(
-        "http://localhost:5000/api/auth/verify-otp",
+        "http://localhost:5000/auth/verify-otp",
         { email, otp }
       );
       console.log("otttttttttp", response);
@@ -118,9 +110,9 @@ const SignUp = () => {
   };
 
   return (
-    <div className="bg-gray-100">
+    <div className="bg-gray-100 h-screen">
       <div className="wrapper">
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary my-8">
+        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-semibold text-primary mt-14 mb-8">
           It only takes a minute to register for your account
         </h1>
         <div className="bg-white my-10 p-6 shadow rounded-sm">
@@ -134,14 +126,8 @@ const SignUp = () => {
                   </h2>
                 </div>
                 <div className="md:w-[70%] ml-auto">
-                  <h1 className="text-primary text-lg">
-                    Create an account using
-                  </h1>
-                  <div className="my-3 w-36">
-                    <LoginGoogle />
-                  </div>
                   <h1 className="text-primary text-lg mb-3">
-                    or join by filling up the form below
+                    join by filling up the form below
                   </h1>
                   <div className="space-y-2">
                     <div>
@@ -161,6 +147,33 @@ const SignUp = () => {
                       {errors.email && (
                         <p className="text-red-500">{errors.email.message}</p>
                       )}
+                    </div>
+
+                    <div className="flex gap-5">
+                      <div className="w-full">
+                        <input
+                          {...register("name", {
+                            required: "Name is required",
+                          })}
+                          placeholder="Your Name"
+                          className="border-slate-400 focus:outline-none border p-2 w-full"
+                        />
+                        {errors.name && (
+                          <p className="text-red-500">{errors.name.message}</p>
+                        )}
+                      </div>
+                      <div className="w-full">
+                        <input
+                          {...register("userName", {})}
+                          placeholder="Your username"
+                          className="border-slate-400 focus:outline-none border p-2 w-full"
+                        />
+                        {errors.userName && (
+                          <p className="text-red-500">
+                            {errors.userName.message}
+                          </p>
+                        )}
+                      </div>
                     </div>
 
                     <div className="flex w-full gap-5">
@@ -209,192 +222,19 @@ const SignUp = () => {
                         )}
                       </div>
                     </div>
-
-                    <div className="flex gap-5">
-                      <div className="w-full">
-                        <input
-                          {...register("address", {})}
-                          placeholder="Your address"
-                          type="text"
-                          className="border-slate-400 focus:outline-none border p-2 w-full"
-                        />
-                        {errors.address && (
-                          <p className="text-red-500">
-                            {errors.address.message}
-                          </p>
-                        )}
-                      </div>
-                      <div className="w-full">
-                        <input
-                          {...register("mobileNumber", {})}
-                          placeholder="Mobile Number"
-                          type="number"
-                          className="border-slate-400 focus:outline-none border p-2 w-full"
-                        />
-                        {errors.mobileNumber && (
-                          <p className="text-red-500">
-                            {errors.mobileNumber.message}
-                          </p>
-                        )}
-                      </div>
-                    </div>
                   </div>
                 </div>
               </div>
 
               <hr className="my-5 border border-slate-300" />
-
-              {/* Second Section */}
-              <div className="lg:flex">
-                <div>
-                  <h2 className="text-lg lg:mb-0 mb-3 font-medium text-primary">
-                    Your personal details
-                  </h2>
-                </div>
-                <div className="md:w-[70%] ml-auto">
-                  <div className="space-y-2">
-                    <select
-                      {...register("title")}
-                      className="border-slate-400 focus:outline-none border p-2 w-full"
-                    >
-                      <option value="">Select...</option>
-                      <option value="Fontend Developer">
-                        Fontend Developer
-                      </option>
-                      <option value="Backend Developer">
-                        Backend Developer
-                      </option>
-                      <option value="Mernstack Developer">
-                        Mernstack Developer
-                      </option>
-                      <option value="Pernstack Developer">
-                        Pernstack Developer
-                      </option>
-                      <option value="Software Developer">
-                        Software Developer
-                      </option>
-                      <option value="Web Developer">Web Developer</option>
-                    </select>
-                    {errors.title && (
-                      <p className="text-red-500">{errors.title.message}</p>
-                    )}
-
-                    <div className="flex gap-5">
-                      <div className="w-full">
-                        <input
-                          {...register("firstName", {
-                            required: "First name is required",
-                          })}
-                          placeholder="First Name"
-                          className="border-slate-400 focus:outline-none border p-2 w-full"
-                        />
-                        {errors.firstName && (
-                          <p className="text-red-500">
-                            {errors.firstName.message}
-                          </p>
-                        )}
-                      </div>
-                      <div className="w-full">
-                        <input
-                          {...register("lastName", {})}
-                          placeholder="Last Name"
-                          className="border-slate-400 focus:outline-none border p-2 w-full"
-                        />
-                        {errors.lastName && (
-                          <p className="text-red-500">
-                            {errors.lastName.message}
-                          </p>
-                        )}
-                      </div>
-                    </div>
-
-                    <div className="flex gap-5">
-                      <div className="w-full">
-                        <input
-                          {...register("dateOfBirth", {
-                            required: "Date of birth is required",
-                          })}
-                          type="date"
-                          className="border-slate-400 focus:outline-none border p-2 w-full"
-                        />
-                        {errors.dateOfBirth && (
-                          <p className="text-red-500">
-                            {errors.dateOfBirth.message}
-                          </p>
-                        )}
-                      </div>
-                      <div className="w-1/2">
-                        <label className="text-sm font-medium mb-2">
-                          Gender (optional)
-                        </label>
-                        <div className="flex items-center gap-4">
-                          <label className="flex items-center gap-2">
-                            <input
-                              {...register("gender")}
-                              type="radio"
-                              value="male"
-                              className="border-slate-400 focus:ring focus:ring-slate-300"
-                            />
-                            Male
-                          </label>
-                          <label className="flex items-center gap-2">
-                            <input
-                              {...register("gender")}
-                              type="radio"
-                              value="female"
-                              className="border-slate-400 focus:ring focus:ring-slate-300"
-                            />
-                            Female
-                          </label>
-                        </div>
-                      </div>
-                    </div>
-
-                    <div className="w-full">
-                      <input
-                        {...register("nid", {})}
-                        placeholder="Your NID"
-                        type="number"
-                        className="border-slate-400 focus:outline-none border p-2 w-full"
-                      />
-                      {errors.nid && (
-                        <p className="text-red-500">{errors.nid.message}</p>
-                      )}
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <hr className="my-5 border border-slate-300" />
-
-              {/* Third Section */}
-              <div className="lg:flex">
-                <div>
-                  <h2 className="text-lg lg:mb-0 mb-3 text-primary font-medium">
-                    Where do you live?
-                  </h2>
-                </div>
-                <div className="md:w-[70%] ml-auto">
-                  <div className="space-y-2">
-                    <input
-                      {...register("country", {})}
-                      placeholder="Country/region of residence"
-                      className="border-slate-400 focus:outline-none border p-2 w-full"
-                    />
-                    {errors.country && (
-                      <p className="text-red-500">{errors.country.message}</p>
-                    )}
-                  </div>
-                  <div className="mt-6">
-                    <button
-                      disabled={loading}
-                      className="bg-primary flex items-center justify-center gap-2 text-white px-6 py-2 rounded-sm shadow hover:bg-[#722246]"
-                    >
-                      {loading && <Loader className="animate-spin" />}
-                      Create an account
-                    </button>
-                  </div>
-                </div>
+              <div className="mt-6 flex items-center justify-center">
+                <button
+                  disabled={loading}
+                  className="bg-primary flex items-center gap-2 text-white px-10 py-2 rounded-sm shadow hover:bg-[#722246]"
+                >
+                  {loading && <Loader className="animate-spin" />}
+                  <span>Create an account</span>{" "}
+                </button>
               </div>
             </form>
           ) : (
@@ -434,19 +274,6 @@ const SignUp = () => {
           </div>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={3000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Bounce}
-      />
     </div>
   );
 };

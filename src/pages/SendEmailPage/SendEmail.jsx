@@ -1,11 +1,13 @@
-import axios from "axios";
 import { Loader } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Bounce, toast, ToastContainer } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { toast } from "react-toastify";
+import { sendEmail } from "../../features/auth/authSlice";
 
 const SendEmail = () => {
   const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
   const {
     register,
     handleSubmit,
@@ -13,45 +15,20 @@ const SendEmail = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    setLoading(true);
-    try {
-      const response = await axios.post(
-        "http://localhost:5000/api/auth/sendemail-forgotpassword",
-        data
-      );
-
-      if (response.status === 200) {
+    dispatch(sendEmail(data))
+      .unwrap()
+      .then(() => {
         setLoading(false);
-        toast.success("🦄Sent email", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-        console.log(response)
-      }
-      console.log(response)
-    } catch (error) {
-      setLoading(false);
-      const message = JSON.parse(error?.request?.responseText)?.error;
-      console.log(message);
-      toast.error(message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
+        toast.success("🦄Sent email");
+      })
+      .catch((error) => {
+        setLoading(false);
+        const message = JSON.parse(error?.request?.responseText)?.error;
+        console.log(message);
+        toast.error(message);
       });
-    }
+
+    setLoading(true);
   };
 
   return (
@@ -96,19 +73,6 @@ const SendEmail = () => {
           </form>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={4000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Bounce}
-      />
     </div>
   );
 };

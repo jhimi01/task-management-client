@@ -1,47 +1,62 @@
 import { useState } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { resetPassword } from "@/redux/authSlice"; // Adjust the path
 import PropTypes from "prop-types";
 import { Eye, EyeClosed } from "lucide-react";
+import { useDispatch, useSelector } from "react-redux";
+import { resetPassword } from "../features/auth/authSlice";
+import { toast } from "react-toastify";
 
-const ResetPasswordModal = ({ isOpen, onClose, onSave }) => {
+const ResetPasswordModal = ({ isOpen, onClose, resetPassworddata }) => {
+  const dispatch = useDispatch();
+  const { isLoading, error } = useSelector((state) => state.auth); // Adjust according to your state structure
+
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [newPass, setNewPass] = useState(true);
   const [showPass, setShowPass] = useState(true);
-  const [error, setError] = useState("");
+  const [localError, setLocalError] = useState("");
 
   const handleSave = () => {
+    setLocalError("");
+
     if (newPassword.length < 6) {
-      setError("Password must be at least 6 characters long");
-      return;
-    }
-
-    // Validate that new password and confirmation match
-    if (newPassword !== confirmPassword) {
-      setError("New password and confirmation do not match");
+      setLocalError("Password must be at least 6 characters long");
       return;
     }
 
     if (newPassword !== confirmPassword) {
-      alert("New password and confirmation do not match");
+      setLocalError("New password and confirmation do not match");
       return;
     }
 
-    onSave({ oldPassword, newPassword });
-    setOldPassword("");
-    setNewPassword("");
-    setConfirmPassword("");
-    onClose();
+    const email = resetPassworddata.email;
+
+    dispatch(resetPassword({ email, oldPassword, newPassword }))
+      .unwrap()
+      .then(() => {
+        toast.success("Password reset successfully");
+        setOldPassword("");
+        setNewPassword("");
+        setConfirmPassword("");
+        onClose();
+      })
+      .catch((err) => {
+        setLocalError(err.message || "Failed to reset password");
+      });
   };
 
-  if (!isOpen) return null; // Ensure modal is only rendered when open
+  if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
       <div className="bg-white p-6 rounded shadow-lg w-96 space-y-3">
         <h2 className="text-xl font-semibold">Reset Password</h2>
-        {/* Display error message */}
+
+        {localError && <p className="text-red-500 text-sm">{localError}</p>}
         {error && <p className="text-red-500 text-sm">{error}</p>}
+
         <div>
           <label htmlFor="oldPassword" className="block">
             Old Password
@@ -61,7 +76,6 @@ const ResetPasswordModal = ({ isOpen, onClose, onSave }) => {
           </label>
           <input
             id="newPassword"
-            max={6}
             type={showPass ? "password" : "text"}
             className="w-full p-2 border border-gray-300 rounded mt-2"
             value={newPassword}
@@ -82,7 +96,6 @@ const ResetPasswordModal = ({ isOpen, onClose, onSave }) => {
           </label>
           <input
             id="confirmPassword"
-            max={6}
             type={newPass ? "password" : "text"}
             className="w-full p-2 border border-gray-300 rounded mt-2"
             value={confirmPassword}
@@ -106,9 +119,10 @@ const ResetPasswordModal = ({ isOpen, onClose, onSave }) => {
           </button>
           <button
             onClick={handleSave}
+            disabled={isLoading}
             className="px-4 py-2 bg-primary text-white rounded"
           >
-            Save
+            {isLoading ? "Saving..." : "Save"}
           </button>
         </div>
       </div>
@@ -119,7 +133,7 @@ const ResetPasswordModal = ({ isOpen, onClose, onSave }) => {
 ResetPasswordModal.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onSave: PropTypes.func.isRequired,
+  resetPassworddata: PropTypes.object.isRequired,
 };
 
 export default ResetPasswordModal;

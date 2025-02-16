@@ -9,5 +9,5 @@
 }
 
 .g-recaptcha {
-  display: block; /* Ensure it's not set to none or hidden */
+  display: block;
 }

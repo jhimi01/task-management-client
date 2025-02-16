@@ -5,16 +5,19 @@ import axios from "axios";
 const VerifyOtp = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { email } = location.state;  // Retrieve email passed from SignUp form
+  const { email } = location.state; // Retrieve email passed from SignUp form
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
 
   const handleOtpSubmit = async () => {
     try {
-      const response = await axios.post("http://localhost:5000/email/sendEmail", { email, otp });
+      const response = await axios.post(
+        "http://localhost:5000/email/sendEmail",
+        { email, otp }
+      );
       if (response.data.success) {
         alert("OTP verified successfully!");
-        navigate("/login");  // Redirect to login after successful verification
+        navigate("/login"); // Redirect to login after successful verification
       } else {
         setError("Invalid OTP. Please try again.");
       }
@@ -42,7 +45,10 @@ const VerifyOtp = () => {
             {error && <p className="text-red-500">{error}</p>}
           </div>
           <div className="mt-6">
-            <button onClick={handleOtpSubmit} className="bg-primary text-white px-6 py-2 rounded-sm shadow hover:bg-[#722246]">
+            <button
+              onClick={handleOtpSubmit}
+              className="bg-primary text-white px-6 py-2 rounded-sm shadow hover:bg-[#722246]"
+            >
               Verify OTP
             </button>
           </div>

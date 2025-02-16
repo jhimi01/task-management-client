@@ -1,14 +1,16 @@
-import axios from "axios";
 import { Eye, EyeClosed, Loader } from "lucide-react";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { useNavigate, useParams } from "react-router";
-import { Bounce, toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
+import { newPassword } from "../../features/auth/authSlice";
 
 const ForgetPassword = () => {
   const [loading, setLoading] = useState(false);
   const [newPass, setNewPass] = useState(true);
   const [confirmPass, setConfirmPass] = useState(true);
+  const dispatch = useDispatch();
   const { id, token } = useParams();
   const navigate = useNavigate();
   const {
@@ -18,63 +20,28 @@ const ForgetPassword = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
+    console.log("data email: ", data);
     setLoading(false);
     setLoading(true);
     console.log(data);
     if (data.newpassword === data.confirmpassword) {
       console.log("correct password");
-      try {
-        const response = await axios.post(
-          `http://localhost:5000/api/auth/reset-forgotpassword/${id}/${token}`,
-          { newPassword: data.newpassword }
-        );
 
-        if (response.status === 200) {
+      dispatch(newPassword({ id, token, newPassword: data.newpassword }))
+        .unwrap()
+        .then(() => {
           setLoading(false);
-          toast.success("Saved password", {
-            position: "top-right",
-            autoClose: 5000,
-            hideProgressBar: false,
-            closeOnClick: false,
-            pauseOnHover: true,
-            draggable: true,
-            progress: undefined,
-            theme: "light",
-            transition: Bounce,
-          })
-          navigate("/login")
-          console.log(response);
-        }
-        console.log(response);
-      } catch (error) {
-        setLoading(false);
-        const message = JSON.parse(error?.request?.responseText)?.error;
-        console.log(message);
-        toast.error(message, {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
+          toast.success("reset password");
+          navigate("/login");
+        })
+        .catch((error) => {
+          setLoading(false);
+          console.log(error);
+          toast.error("failed");
         });
-      }
     } else {
       setLoading(false);
-      toast.error("confirm password doesn't match", {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast.error("confirm password doesn't match");
     }
   };
   return (
@@ -162,19 +129,6 @@ const ForgetPassword = () => {
           </form>
         </div>
       </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={4000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick={false}
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-        transition={Bounce}
-      />
     </div>
   );
 };

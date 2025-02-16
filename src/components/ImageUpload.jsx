@@ -2,16 +2,14 @@ import axios from "axios";
 import PropTypes from "prop-types";
 import { Edit, LoaderCircle } from "lucide-react";
 import { useState } from "react";
-import { useCookie } from "../hooks/useCookie";
-import useLoggedInUser from "../hooks/useLoggedInUser";
+import { useDispatch } from "react-redux";
+import { imageAdd } from "../features/auth/authSlice";
 
 const ImageUpload = ({ onChange }) => {
   const [loading, setLoading] = useState(false);
   const [imageUrl, setImageUrl] = useState("");
   const [error, setError] = useState("");
-  const { refetch } = useLoggedInUser();
-  const { getCookie } = useCookie({ key: "Token", days: 7 });
-  const token = getCookie();
+  const dispatch = useDispatch();
 
   const handleImageUpload = async (event) => {
     const file = event.target.files?.[0];
@@ -36,15 +34,9 @@ const ImageUpload = ({ onChange }) => {
       setImageUrl(uploadedImageUrl);
       onChange(uploadedImageUrl);
 
-      // Send the URL to the backend to update the user profile
-      await axios.patch(
-        "http://localhost:5000/api/auth/edit-image",
-        { img: uploadedImageUrl },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const img = uploadedImageUrl;
 
-      // Refetch user data to reflect changes
-      refetch();
+      await dispatch(imageAdd(img)).unwrap();
     } catch (err) {
       console.error(err);
       setError("Error uploading image. Please try again.");
