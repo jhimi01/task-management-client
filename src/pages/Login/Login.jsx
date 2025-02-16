@@ -2,7 +2,7 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { Eye, EyeClosed, Loader } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
-import { Bounce, toast } from "react-toastify";
+import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -33,31 +33,16 @@ const Login = () => {
   useEffect(() => {
     if (user && token) {
       navigate("/");
-      toast.success("🦄 Logged in successfully!", {
-        position: "top-right",
-        autoClose: 5000,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast.success("🦄 Logged in successfully!");
     }
     if (otpSent) {
       setShowOTP(true);
-      toast.success("OTP sent to your email", {
-        position: "top-right",
-        autoClose: 5000,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast.success("OTP sent to your email");
     } else{
       setShowOTP(false);
     }
     if (error) {
-      toast.error(error, {
-        position: "top-right",
-        autoClose: 5000,
-        theme: "light",
-        transition: Bounce,
-      });
+      toast.error(error);
       dispatch(clearError());
     }
   }, [user, token, otpSent, error, navigate, dispatch]);

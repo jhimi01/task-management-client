@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "universal-cookie";
 
-const API_URL = "http://localhost:5000/auth"; // Update with your backend URL
+const API_URL = "http://localhost:5001/auth"; // Update with your backend URL
 const cookies = new Cookies();
 const token = cookies.get("Token");
 
@@ -61,7 +61,7 @@ export const updateUserData = createAsyncThunk(
   async (userData, thunkAPI) => {
     try {
       const response = await axios.put(
-        "http://localhost:5000/auth/profile", // Ensure this endpoint is correct
+        "http://localhost:5001/auth/profile", // Ensure this endpoint is correct
         userData,
         {
           headers: { Authorization: `Bearer ${token}` }, // Pass token for auth
@@ -83,7 +83,7 @@ export const imageAdd = createAsyncThunk(
   async (img, { rejectWithValue }) => {
     try {
       const response = await axios.put(
-        "http://localhost:5000/auth/edit-image",
+        "http://localhost:5001/auth/edit-image",
         { img }, // Make sure the key matches what the backend expects
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -100,7 +100,7 @@ export const resetPassword = createAsyncThunk(
   async (data, rejectWithValue) => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/auth/reset-password",
+        "http://localhost:5001/auth/reset-password",
         data,
         {
           headers: {
@@ -124,7 +124,7 @@ export const sendEmail = createAsyncThunk(
   async (email, rejectWithValue) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/auth/sendemail-forgotpassword`,
+        `http://localhost:5001/auth/sendemail-forgotpassword`,
         email,
         {
           headers: {
@@ -146,7 +146,7 @@ export const newPassword = createAsyncThunk(
   async ({ id, token, newPassword }, thunkAPI) => {
     try {
       const response = await axios.post(
-        `http://localhost:5000/auth/forgot-password/${id}/${token}`,
+        `http://localhost:5001/auth/forgot-password/${id}/${token}`,
         { newPassword },
         {
           headers: { "Content-Type": "application/json" },

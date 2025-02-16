@@ -12,7 +12,7 @@ const VerifyOtp = () => {
   const handleOtpSubmit = async () => {
     try {
       const response = await axios.post(
-        "http://localhost:5000/email/sendEmail",
+        "http://localhost:5001/email/sendEmail",
         { email, otp }
       );
       if (response.data.success) {
