@@ -1,13 +1,17 @@
-# Project Name
+# Task Management System
 
 ## Overview
 This project is a [brief description of the project], designed using React, Redux for state management, and integrated with REST APIs for data handling. The application follows best practices for security and scalability.
 
 ## Features
 - User authentication with JWT
+- User register with a otp
+- User login with password, email and a google recaptcha
+- Logout
+- Update profile included with (name, username, add bio and add image)
+- Reset Password and forgot password
+- Task management system(CRUD operation)
 - API integration with Redux
-- Task management system
-- Role-based access control
 - Secure data handling
 
 ---
@@ -21,38 +25,6 @@ This project uses **Redux Toolkit** for efficient state management and API integ
 - **Redux Thunk for async API calls**: Middleware for handling asynchronous operations like login, fetching tasks, etc.
 - **Selector functions**: For accessing specific parts of the state efficiently.
 
-### Example: `authSlice.js`
-```javascript
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import api from '../../utils/api';
-
-export const loginUser = createAsyncThunk('auth/loginUser', async (credentials) => {
-  const response = await api.post('/login', credentials);
-  return response.data;
-});
-
-const authSlice = createSlice({
-  name: 'auth',
-  initialState: { user: null, token: null, loading: false, error: null },
-  reducers: {},
-  extraReducers: (builder) => {
-    builder
-      .addCase(loginUser.pending, (state) => { state.loading = true; })
-      .addCase(loginUser.fulfilled, (state, action) => {
-        state.loading = false;
-        state.user = action.payload.user;
-        state.token = action.payload.token;
-      })
-      .addCase(loginUser.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message;
-      });
-  }
-});
-
-export default authSlice.reducer;
-```
-
 ---
 
 ## Setup Instructions
@@ -63,21 +35,17 @@ export default authSlice.reducer;
 
 ### Installation
 ```sh
-git clone https://github.com/your-repo.git
+git clone https://github.com/jhimi01/task-management-client.git
 cd project-directory
 npm install
 ```
 
 ### Environment Variables
-Create a `.env` file in the root directory and add:
-```env
-REACT_APP_API_URL=http://localhost:5000/api
-JWT_SECRET=your-secret-key
-```
+I will send this to your email
 
 ### Running Locally
 ```sh
-npm start
+npm run dev
 ```
 
 ---

@@ -1,12 +1,15 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import PropTypes from "prop-types";
 import { Button, Group, Modal, TextInput, Textarea } from "@mantine/core";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { updateUserData } from "../features/auth/authSlice";
+import { toast } from "react-toastify";
 
 const EditProfileModal = ({ isOpen, onClose, selectedUser }) => {
   const dispatch = useDispatch();
+  const [emailError, setEmailError] = useState("");
+
 
   const {
     register,
@@ -25,13 +28,17 @@ const EditProfileModal = ({ isOpen, onClose, selectedUser }) => {
     }
   }, [selectedUser, setValue]);
 
-
   const onSubmit = async (data) => {
     try {
       await dispatch(updateUserData(data)).unwrap();
       onClose(); // Close the modal after successful update
+      toast.success("updated successfully")
     } catch (error) {
-      console.error("Error updating user data:", error.message);
+      if (error.message === "Email is already in use") {
+        setEmailError("Email is already in use");
+      } else {
+        console.error("Error updating user data:", error.message);
+      }
     }
   };
 
@@ -69,7 +76,7 @@ const EditProfileModal = ({ isOpen, onClose, selectedUser }) => {
           label="Email"
           type="email"
           {...register("email", { required: "Email is required" })}
-          error={errors.email?.message}
+          error={errors.email?.message || emailError}
           mb="md"
         />
 
