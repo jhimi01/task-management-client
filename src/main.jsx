@@ -26,7 +26,7 @@ const router = createBrowserRouter([
     path: "/",
     element: (
       // <PrivateRoute>
-        <Dashboard />
+      <Dashboard />
       // </PrivateRoute>
     ),
     children: [
@@ -50,9 +50,9 @@ const router = createBrowserRouter([
       {
         path: "/profile",
         element: (
-          <PrivateRoute>
-            <ProfilePage />
-          </PrivateRoute>
+          // <PrivateRoute>
+          <ProfilePage />
+          // </PrivateRoute>
         ),
       },
     ],
@@ -61,15 +61,15 @@ const router = createBrowserRouter([
     path: "/signup",
     element: (
       // <PrivateLoginandSignRoute>
-        <SingUp />
-      // </PrivateLoginandSignRoute>
+      <SingUp />
+      //  </PrivateLoginandSignRoute>
     ),
   },
   {
     path: "/login",
     element: (
       // <PrivateLoginandSignRoute>
-        <Login />
+      <Login />
       // </PrivateLoginandSignRoute>
     ),
   },
@@ -90,7 +90,7 @@ createRoot(document.getElementById("root")).render(
         <RouterProvider router={router} />
         <ToastContainer
           position="top-right"
-          autoClose={5000}
+          autoClose={1500}
           hideProgressBar={false}
           newestOnTop={false}
           closeOnClick={false}

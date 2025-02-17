@@ -3,19 +3,40 @@ import axios from "axios";
 import Cookies from "universal-cookie";
 
 const API_URL = "http://localhost:5001/auth"; // Update with your backend URL
-const cookies = new Cookies();
-const token = cookies.get("Token");
+// const cookies = new Cookies();
+// const token = cookies.get("Token");
 
 // Async Thunk: Login (Request OTP)
+// export const loginUser = createAsyncThunk(
+//   "auth/loginUser",
+//   async (userData, thunkAPI) => {
+//     const cookies = new Cookies();
+//     try {
+//       const response = await axios.post(
+//         `http://localhost:5001/auth/login`,
+//         userData
+//       );
+//       cookies.set("Token", response.data.token, { path: "/" });
+//       return response.data; // Expecting { message: "OTP sent to your email" }
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(
+//         error.response?.data || "Failed to Login user data"
+//       );
+//     }
+//   }
+// );
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (userData, thunkAPI) => {
+    const cookies = new Cookies();
     try {
       const response = await axios.post(
-        `http://localhost:5001/auth/login`,
+        "http://localhost:5001/auth/login",
         userData
       );
-      return response.data; // Expecting { message: "OTP sent to your email" }
+      cookies.set("Token", response.data.token, { path: "/" });
+      thunkAPI.dispatch(fetchUserData()); // Fetch user data after setting the token
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
         error.response?.data || "Failed to Login user data"
@@ -24,49 +45,59 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// Async Thunk: Verify OTP
-export const verifyOTP = createAsyncThunk(
-  "auth/verifyOTP",
-  async ({ email, otp }, thunkAPI) => {
-    try {
-      const response = await axios.post(
-        `http://localhost:5001/auth/verify-otp-login`,
-        {
-          email,
-          otp,
-        }
-      );
-      cookies.set("Token", response.data.token, { path: "/" });
-      return response.data;
-    } catch (error) {
-      return thunkAPI.rejectWithValue(
-        error.response?.data || "Failed to varified"
-      );
-    }
-  }
-);
-
 // Async Thunk: Fetch Logged-in User Data
+// export const fetchUserData = createAsyncThunk(
+//   "auth/fetchUserData",
+//   async (_, thunkAPI) => {
+//     const cookies = new Cookies();
+//     const token = cookies.get("Token");
+//     console.log("token", token);
+    
+//     if (!token) {
+//       return thunkAPI.rejectWithValue("Token is missing");
+//     }
+
+//     try {
+//       const response = await axios.get(`${API_URL}/profile`, {
+//         headers: { Authorization: `Bearer ${token}` },
+//       });
+
+//       return response.data; // ✅ Correct way to return response data
+//     } catch (error) {
+//       return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+//     }
+//   }
+// );
 export const fetchUserData = createAsyncThunk(
   "auth/fetchUserData",
-  async (_, { rejectWithValue }) => {
+  async (_, thunkAPI) => {
+    const cookies = new Cookies();
+    const token = cookies.get("Token");
+    console.log("token", token);
+    
+    if (!token) {
+      return thunkAPI.rejectWithValue("Token is missing");
+    }
+
     try {
       const response = await axios.get(`${API_URL}/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       return response.data;
     } catch (error) {
-      return rejectWithValue(
-        error.response?.data || "Failed to fetch user data"
-      );
+      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
     }
   }
 );
+
 
 // Async Thunk: update User Data
 export const updateUserData = createAsyncThunk(
   "auth/updateUserData",
   async (userData, thunkAPI) => {
+    const cookies = new Cookies();
+    const token = cookies.get("Token");
     try {
       const response = await axios.put(
         "http://localhost:5001/auth/profile", // Ensure this endpoint is correct
@@ -89,6 +120,8 @@ export const updateUserData = createAsyncThunk(
 export const imageAdd = createAsyncThunk(
   "auth/imageAdd",
   async (img, { rejectWithValue }) => {
+    const cookies = new Cookies();
+    const token = cookies.get("Token");
     try {
       const response = await axios.put(
         "http://localhost:5001/auth/edit-image",
@@ -170,26 +203,32 @@ export const newPassword = createAsyncThunk(
 
 // Async Thunk: Logout User
 export const logoutUser = createAsyncThunk("auth/logoutUser", async () => {
+  const cookies = new Cookies();
+  const token = cookies.get("Token");
   try {
     const response = await axios.delete(`${API_URL}/logout`, {
       headers: {
         Authorization: `Bearer ${token}`,
       },
     });
-    cookies.remove("Token");
-    return response.data;
+    if (token) {
+      cookies.remove("Token", { path: "/" });
+    }
+    return response?.data || {};
     // return null;
   } catch (error) {
     console.log(error);
   }
 });
 
+const cookies = new Cookies();
+const token = cookies.get("Token");
+
 const initialState = {
   user: null,
-  token: cookies.get("Token") || null,
+  authToken: cookies.get("Token") || null,
   isLoading: false,
   error: null,
-  otpSent: false,
 };
 
 const authSlice = createSlice({
@@ -209,33 +248,32 @@ const authSlice = createSlice({
       })
       .addCase(loginUser.fulfilled, (state) => {
         state.isLoading = false;
-        state.otpSent = true;
       })
       .addCase(loginUser.rejected, (state, action) => {
         state.isLoading = false;
         state.error = action.payload;
       })
 
-      // verifyOTP while login
-      .addCase(verifyOTP.pending, (state) => {
+      // get user information
+      .addCase(fetchUserData.pending, (state) => {
         state.isLoading = true;
       })
-      .addCase(verifyOTP.fulfilled, (state, action) => {
-        state.isLoading = false;
-        state.user = action.payload.userData;
-        state.token = action.payload.token;
-      })
-      .addCase(verifyOTP.rejected, (state, action) => {
-        state.isLoading = false;
-        state.error = action.payload;
-      })
-
+      
       // get user information
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.user = action.payload;
+        state.isLoading = false;
+      })
+      // get user information
+      .addCase(fetchUserData.rejected, (state, action) => {
+        state.user = action.payload;
+        state.isLoading = false;
       })
 
       // update user
+      .addCase(updateUserData.pending, (state) => {
+        state.isLoading = true;
+      })
       .addCase(updateUserData.fulfilled, (state, action) => {
         state.user = action.payload; // Update user with new data
         state.isLoading = false;
@@ -243,9 +281,6 @@ const authSlice = createSlice({
       .addCase(updateUserData.rejected, (state, action) => {
         state.error = action.payload;
         state.isLoading = false;
-      })
-      .addCase(updateUserData.pending, (state) => {
-        state.isLoading = true;
       })
 
       // add image to the user

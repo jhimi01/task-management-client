@@ -7,21 +7,24 @@ import { useEffect } from "react";
 import { fetchMyTasks } from "../../features/tasks/taskSlice";
 import { Link } from "react-router";
 import { fetchUserData } from "../../features/auth/authSlice";
-// import useLoggedInUser from "../../hooks/useLoggedInUser";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { tasks, isLoading, error, token } = useSelector((state) => state.tasks);
+  const { tasks, isLoading, error, token } = useSelector(
+    (state) => state.tasks
+  );
 
-   const { user } = useSelector((state) => state.auth);
- 
-   useEffect(() => {
-     dispatch(fetchUserData());
-   }, [dispatch, user, token]);
+  const { user, authToken } = useSelector((state) => state.auth);
+  console.log(user, authToken);
+
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, [dispatch, authToken]);
 
   useEffect(() => {
     dispatch(fetchMyTasks());
-  }, [dispatch]);
+  }, [dispatch, token]);
+
   const pendingTask = tasks?.filter((pending) => pending.status === "pending");
   const completedTask = tasks?.filter(
     (pending) => pending.status === "completed"

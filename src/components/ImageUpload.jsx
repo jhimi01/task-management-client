@@ -1,7 +1,7 @@
 import axios from "axios";
 import PropTypes from "prop-types";
 import { Edit, LoaderCircle } from "lucide-react";
-import { useState } from "react";
+import { useState, useCallback } from "react";
 import { useDispatch } from "react-redux";
 import { imageAdd } from "../features/auth/authSlice";
 
@@ -11,7 +11,7 @@ const ImageUpload = ({ onChange }) => {
   const [error, setError] = useState("");
   const dispatch = useDispatch();
 
-  const handleImageUpload = async (event) => {
+  const handleImageUpload = useCallback(async (event) => {
     const file = event.target.files?.[0];
     if (!file) return;
 
@@ -24,27 +24,24 @@ const ImageUpload = ({ onChange }) => {
     setError("");
 
     try {
-      // Upload to Cloudinary
-      const response = await axios.post(
+      const { data } = await axios.post(
         "https://api.cloudinary.com/v1_1/dudkmza2y/image/upload",
         formData
       );
 
-      const uploadedImageUrl = response.data.secure_url;
+      const uploadedImageUrl = data.secure_url;
       setImageUrl(uploadedImageUrl);
       onChange(uploadedImageUrl);
 
-      const img = uploadedImageUrl;
-
-      await dispatch(imageAdd(img)).unwrap();
+      await dispatch(imageAdd(uploadedImageUrl)).unwrap();
+      window.location.reload();
     } catch (err) {
-      console.error(err);
-      setError("Error uploading image. Please try again.");
+      console.error("Upload failed:", err);
+      setError(err.response?.data?.error?.message || "Error uploading image. Please try again.");
     } finally {
       setLoading(false);
     }
-  };
-
+  }, [dispatch, onChange]);
   return (
     <div>
       <label className="cursor-pointer transition-all duration-300">

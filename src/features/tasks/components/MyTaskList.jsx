@@ -14,6 +14,8 @@ const MyTaskList = () => {
   const [opened, setOpened] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
 
+  console.log("tasks", tasks)
+
   useEffect(() => {
     dispatch(fetchMyTasks());
   }, [dispatch]);
@@ -23,7 +25,7 @@ const MyTaskList = () => {
     setOpened(true);
   };
 
-  if (isLoading) return <p>Loading tasks...</p>;
+  // if (isLoading) return <p>Loading tasks...</p>;
   if (error) return <p>Error: {error}</p>;
 
   return (

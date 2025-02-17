@@ -10,10 +10,10 @@ import { useEffect } from "react";
 
 const PrivateRoute = ({ children }) => {
   const dispatch = useDispatch();
+  const { isLoading, user } = useSelector((state) => state.auth);
   useEffect(() => {
     dispatch(fetchUserData());
-  }, [dispatch]);
-  const { isLoading, user } = useSelector((state) => state.auth);
+  }, [dispatch, user]);
   const { getCookie } = useCookie({ key: "Token", days: 7 });
   const token = getCookie();
   const location = useLocation();

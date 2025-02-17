@@ -307,9 +307,17 @@ export default function Dashboard() {
                       justifyContent: "center",
                     }}
                   >
-                    <AccountCircleIcon
-                      className={`${!open && " text-white "}`}
-                    />
+                    {user && user.userData && user.userData.img ? (
+                      <img
+                        src={user.userData.img}
+                        className="w-10 h-10 border-gray-400 border-2 rounded-full"
+                        alt="profile img"
+                      />
+                    ) : (
+                      <AccountCircleIcon
+                        className={`${!open && " text-white "}`}
+                      />
+                    )}
                   </ListItemIcon>
                   <ListItemText
                     primary="Profile"

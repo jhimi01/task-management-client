@@ -25,13 +25,13 @@ const TaskForm = () => {
         title,
         description,
         dueDate: formattedDueDate,
-        // status,
         userId,
       };
 
-      dispatch(addTask(taskData));
+      const responsce = dispatch(addTask(taskData));
       reset();
       navigate('/my-tasks');
+      console.log(responsce);
       toast.success("Task added successfully!", {});
     } catch (e) {
       toast.error('Failed adding task')

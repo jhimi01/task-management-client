@@ -1,9 +1,6 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "universal-cookie";
 
-const cookies = new Cookies();
-const token = cookies.get("Token"); // Retrieve token from cookies
-
 // API Base URL (adjust as needed)
 const API_BASE_URL = "http://localhost:5001/auth";
 
@@ -11,6 +8,13 @@ const API_BASE_URL = "http://localhost:5001/auth";
 export const fetchMyTasks = createAsyncThunk(
   "tasks/fetchMy",
   async (_, thunkAPI) => {
+    const cookies = new Cookies();
+    const token = cookies.get("Token");  // Retrieve token here to ensure it's fresh
+
+    if (!token) {
+      return thunkAPI.rejectWithValue("Token is missing");
+    }
+
     try {
       const response = await fetch(`${API_BASE_URL}/tasks`, {
         headers: {
@@ -26,10 +30,13 @@ export const fetchMyTasks = createAsyncThunk(
   }
 );
 
+
 // Fetch a single task
 export const singleTask = createAsyncThunk(
   "tasks/singleTask",
   async ({ id }, thunkAPI) => {
+    const cookies = new Cookies();
+    const token = cookies.get("Token");
     try {
       const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
         method: "GET",
@@ -52,6 +59,8 @@ export const singleTask = createAsyncThunk(
 export const addTask = createAsyncThunk(
   "tasks/add",
   async (taskData, thunkAPI) => {
+    const cookies = new Cookies();
+    const token = cookies.get("Token");
     try {
       const response = await fetch(`${API_BASE_URL}/tasks`, {
         method: "POST",
@@ -74,6 +83,8 @@ export const addTask = createAsyncThunk(
 export const updateTask = createAsyncThunk(
   "tasks/update",
   async (taskData, thunkAPI) => {
+    const cookies = new Cookies();
+    const token = cookies.get("Token");
     try {
       const response = await fetch(`${API_BASE_URL}/tasks/${taskData.id}`, {
         method: "PUT",
@@ -96,6 +107,8 @@ export const updateTask = createAsyncThunk(
 export const deleteTask = createAsyncThunk(
   "tasks/delete",
   async (id, thunkAPI) => {
+    const cookies = new Cookies();
+    const token = cookies.get("Token");
     try {
       const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
         method: "DELETE",
