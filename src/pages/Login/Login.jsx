@@ -9,6 +9,7 @@ import {
   loginUser,
   verifyOTP,
   clearError,
+  fetchUserData,
 } from "../../features/auth/authSlice";
 
 const Login = () => {
@@ -31,14 +32,18 @@ const Login = () => {
   );
 
   useEffect(() => {
+    dispatch(fetchUserData());
+  }, [dispatch]);
+
+  useEffect(() => {
     if (user && token) {
       navigate("/");
-      toast.success("🦄 Logged in successfully!");
+      // toast.success("🦄 Done");
     }
     if (otpSent) {
       setShowOTP(true);
       toast.success("OTP sent to your email");
-    } else{
+    } else {
       setShowOTP(false);
     }
     if (error) {
@@ -53,17 +58,62 @@ const Login = () => {
 
   // Handle Login
   const onSubmit = (data) => {
-    console.log("Login form data:", data);
-    console.log("reCAPTCHA token:", recaptchaToken);
     setEmail(data.email);
-    dispatch(
-      loginUser({ email: data.email, password: data.password, recaptchaToken })
-    );
+    try {
+      const resultAction = dispatch(
+        loginUser({
+          email: data.email,
+          password: data.password,
+          recaptchaToken,
+        })
+      );
+
+      if (loginUser.fulfilled.match(resultAction)) {
+        // Login successful
+        toast.success("Done!");
+
+        // Reload the page after successful login
+        window.location.reload();
+      } else if (loginUser.pending.match(resultAction)) {
+        console.log("object");
+        toast.info(resultAction.payload || "pending");
+      } else {
+        // Login failed
+        console.log(resultAction.payload);
+      }
+    } catch (error) {
+      const resultAction = dispatch(
+        loginUser({
+          email: data.email,
+          password: data.password,
+          recaptchaToken,
+        })
+      );
+      toast.error("Failed to verify OTP", resultAction.payload);
+      console.log(error);
+    }
   };
 
   // Handle OTP Verification
-  const handleVerifyOTP = () => {
-    dispatch(verifyOTP({ email, otp }));
+  const handleVerifyOTP = async () => {
+    try {
+      // Dispatch the OTP verification action
+      const resultAction = await dispatch(verifyOTP({ email, otp })).unwrap();
+
+      if (verifyOTP.fulfilled.match(resultAction)) {
+        // OTP verification successful
+        toast.success("🦄 OTP Verified");
+
+        // Reload the page after OTP verification is successful
+        window.location.reload();
+      } else {
+        // OTP verification failed
+        toast.error(resultAction.payload || "Failed to verify OTP");
+      }
+    } catch (err) {
+      toast.error("Failed to verify OTP");
+      console.error(err);
+    }
   };
 
   console.log("show otp", showOTP);

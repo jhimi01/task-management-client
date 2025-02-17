@@ -20,25 +20,22 @@ const ForgetPassword = () => {
   } = useForm();
 
   const onSubmit = async (data) => {
-    console.log("data email: ", data);
     setLoading(false);
     setLoading(true);
-    console.log(data);
     if (data.newpassword === data.confirmpassword) {
-      console.log("correct password");
 
       dispatch(newPassword({ id, token, newPassword: data.newpassword }))
         .unwrap()
         .then(() => {
           setLoading(false);
           toast.success("reset password");
-          navigate("/login");
         })
         .catch((error) => {
           setLoading(false);
           console.log(error);
           toast.error("failed");
         });
+        navigate("/login");
     } else {
       setLoading(false);
       toast.error("confirm password doesn't match");

@@ -6,17 +6,20 @@ const API_URL = "http://localhost:5001/auth"; // Update with your backend URL
 const cookies = new Cookies();
 const token = cookies.get("Token");
 
-console.log(token)
-
 // Async Thunk: Login (Request OTP)
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
-  async (userData, { rejectWithValue }) => {
+  async (userData, thunkAPI) => {
     try {
-      const response = await axios.post(`${API_URL}/login`, userData);
+      const response = await axios.post(
+        `http://localhost:5001/auth/login`,
+        userData
+      );
       return response.data; // Expecting { message: "OTP sent to your email" }
     } catch (error) {
-      return rejectWithValue(error.response?.data || "Login failed");
+      return thunkAPI.rejectWithValue(
+        error.response?.data || "Failed to Login user data"
+      );
     }
   }
 );
@@ -24,16 +27,21 @@ export const loginUser = createAsyncThunk(
 // Async Thunk: Verify OTP
 export const verifyOTP = createAsyncThunk(
   "auth/verifyOTP",
-  async ({ email, otp }, { rejectWithValue }) => {
+  async ({ email, otp }, thunkAPI) => {
     try {
-      const response = await axios.post(`${API_URL}/verify-otp-login`, {
-        email,
-        otp,
-      });
+      const response = await axios.post(
+        `http://localhost:5001/auth/verify-otp-login`,
+        {
+          email,
+          otp,
+        }
+      );
       cookies.set("Token", response.data.token, { path: "/" });
       return response.data;
     } catch (error) {
-      return rejectWithValue(error.response?.data || "OTP verification failed");
+      return thunkAPI.rejectWithValue(
+        error.response?.data || "Failed to varified"
+      );
     }
   }
 );

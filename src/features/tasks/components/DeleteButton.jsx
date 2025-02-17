@@ -11,7 +11,6 @@ const DeleteButton = ({ id }) => {
   const handleDelete = async (id) => {
     try {
       await dispatch(deleteTask(id)).unwrap(); // unwrap returns a promise for the fulfilled state
-      console.log("Item deleted", id);
       toast.success("Item deleted successfully");
     } catch (err) {
       toast.error("Failed deleting task");

@@ -20,10 +20,10 @@ const LogoutButton = ({ open }) => {
   };
   return (
     <div>
-      <button onClick={handleLogout} className="flex items-center gap-5">
+      <div onClick={handleLogout} className="flex items-center gap-5">
         <LogOut className={`${!open && " text-white "}`} />
         <span className="text-lg text-gray-700">{open && "Logout"}</span>
-      </button>
+      </div>
     </div>
   );
 };

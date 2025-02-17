@@ -8,34 +8,33 @@ import { fetchUserData } from "../../features/auth/authSlice";
 
 const ProfilePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
-    useState(false);
+  const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
   const [resetPassword, setResetPassword] = useState({});
 
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
 
   useEffect(() => {
     dispatch(fetchUserData());
   }, [dispatch]);
 
+  // for update users information
   const handleEditClick = (userData) => {
     setIsModalOpen(true);
     setSelectedUser(userData);
   };
 
+  // for change password
   const handleResetPasswordClick = (data) => {
     setResetPassword(data);
     setIsResetPasswordModalOpen(true);
   };
 
+  // for image upload
   const handleImageChange = (newImageUrl) => {
-    // refetch();
     console.log("Image URL received from child:", newImageUrl);
   };
-
 
   return (
     <div>
@@ -81,9 +80,6 @@ const ProfilePage = () => {
                         year: "numeric",
                         month: "long",
                         day: "numeric",
-                        // hour: "numeric",
-                        // minute: "numeric",
-                        // second: "numeric",
                       }
                     ),
                   ],
@@ -114,7 +110,7 @@ const ProfilePage = () => {
         </div>
       </div>
 
-      {/* Modals */}
+      {/* update profile Modals */}
       {user?.userData && (
         <EditProfileModal
           isOpen={isModalOpen}
@@ -123,11 +119,11 @@ const ProfilePage = () => {
         />
       )}
 
+ {/* change password Modals */}
       <ResetPasswordModal
         isOpen={isResetPasswordModalOpen}
         onClose={() => setIsResetPasswordModalOpen(false)}
         resetPassworddata={resetPassword}
-        // onSave={handleResetPasswordSave}
       />
     </div>
   );

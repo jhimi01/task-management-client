@@ -17,7 +17,7 @@ const VerifyOtp = () => {
       );
       if (response.data.success) {
         alert("OTP verified successfully!");
-        navigate("/login"); // Redirect to login after successful verification
+        navigate("/login");
       } else {
         setError("Invalid OTP. Please try again.");
       }

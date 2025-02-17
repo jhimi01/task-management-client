@@ -56,6 +56,7 @@ const EditModal = ({ setOpened, opened, selectedTask }) => {
       centered
       onClose={() => setOpened(false)}
       title="Edit Task"
+      zIndex={1000000} 
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         <TextInput

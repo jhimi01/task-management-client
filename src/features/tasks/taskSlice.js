@@ -30,7 +30,6 @@ export const fetchMyTasks = createAsyncThunk(
 export const singleTask = createAsyncThunk(
   "tasks/singleTask",
   async ({ id }, thunkAPI) => {
-    console.log("thisisdjhfsgf", id);
     try {
       const response = await fetch(`${API_BASE_URL}/tasks/${id}`, {
         method: "GET",
@@ -75,8 +74,6 @@ export const addTask = createAsyncThunk(
 export const updateTask = createAsyncThunk(
   "tasks/update",
   async (taskData, thunkAPI) => {
-    console.log("updated task", taskData);
-
     try {
       const response = await fetch(`${API_BASE_URL}/tasks/${taskData.id}`, {
         method: "PUT",

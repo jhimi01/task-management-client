@@ -11,14 +11,13 @@ import { fetchUserData } from "../../features/auth/authSlice";
 
 const Home = () => {
   const dispatch = useDispatch();
-  const { tasks, isLoading, error } = useSelector((state) => state.tasks);
+  const { tasks, isLoading, error, token } = useSelector((state) => state.tasks);
 
    const { user } = useSelector((state) => state.auth);
-   console.log(user);
  
    useEffect(() => {
      dispatch(fetchUserData());
-   }, [dispatch]);
+   }, [dispatch, user, token]);
 
   useEffect(() => {
     dispatch(fetchMyTasks());
@@ -27,7 +26,6 @@ const Home = () => {
   const completedTask = tasks?.filter(
     (pending) => pending.status === "completed"
   );
-  console.log("pending", pendingTask);
   if (isLoading) return <p>Loading tasks...</p>;
   if (error) return <p>Error: {error}</p>;
   return (

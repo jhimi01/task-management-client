@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { Button, Group, Modal, TextInput, Textarea } from "@mantine/core";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { updateUserData } from "../features/auth/authSlice"; // Assuming this is the update action
+import { updateUserData } from "../features/auth/authSlice";
 
 const EditProfileModal = ({ isOpen, onClose, selectedUser }) => {
   const dispatch = useDispatch();
@@ -25,6 +25,7 @@ const EditProfileModal = ({ isOpen, onClose, selectedUser }) => {
     }
   }, [selectedUser, setValue]);
 
+
   const onSubmit = async (data) => {
     try {
       await dispatch(updateUserData(data)).unwrap();
@@ -43,6 +44,8 @@ const EditProfileModal = ({ isOpen, onClose, selectedUser }) => {
       centered
       onClose={onClose}
       title="Edit Profile"
+      className="z-[1000000]"
+      zIndex={1000000}
     >
       <form onSubmit={handleSubmit(onSubmit)}>
         {/* Name */}

@@ -39,7 +39,6 @@ const SignUp = () => {
         "http://localhost:5001/auth/register",
         newUser
       );
-      console.log("this is a response data", response.data);
       if (response.status === 200) {
         setLoading(false);
         toast.success("OTP sent to your email", {
@@ -57,7 +56,6 @@ const SignUp = () => {
       }
       setEmail(data.email);
 
-      console.log("this is a data", response);
     } catch (error) {
       setLoading(false);
       toast.error("An error User email already exists", error.message, {
@@ -86,7 +84,6 @@ const SignUp = () => {
         "http://localhost:5001/auth/verify-otp",
         { email, otp }
       );
-      console.log("otttttttttp", response);
       if (response.status === 200) {
         setLoading(false);
         toast.success("User verified successfully", {

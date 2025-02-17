@@ -27,6 +27,7 @@ import { Button } from "@mui/material";
 import LogoutButton from "../../features/auth/components/LogoutButton";
 import { fetchUserData } from "../../features/auth/authSlice";
 import { useDispatch, useSelector } from "react-redux";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 const drawerWidth = 240;
 
@@ -51,15 +52,6 @@ const closedMixin = (theme) => ({
   },
 });
 
-const DrawerHeader = styled("div")(({ theme }) => ({
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "flex-end",
-  padding: theme.spacing(0, 1),
-  // necessary for content to be below app bar
-  ...theme.mixins.toolbar,
-}));
-
 const AppBar = styled(MuiAppBar, {
   shouldForwardProp: (prop) => prop !== "open",
 })(({ theme, open }) => ({
@@ -76,6 +68,15 @@ const AppBar = styled(MuiAppBar, {
       duration: theme.transitions.duration.enteringScreen,
     }),
   }),
+}));
+
+const DrawerHeader = styled("div")(({ theme }) => ({
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "flex-end",
+  padding: theme.spacing(0, 1),
+  // necessary for content to be below app bar
+  ...theme.mixins.toolbar,
 }));
 
 const Drawer = styled(MuiDrawer, {
@@ -98,13 +99,13 @@ const Drawer = styled(MuiDrawer, {
 export default function Dashboard() {
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  console.log(user);
 
   React.useEffect(() => {
     dispatch(fetchUserData());
   }, [dispatch]);
   const theme = useTheme();
-  const [open, setOpen] = React.useState(true);
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const [open, setOpen] = React.useState(!isMobile);
   const location = useLocation();
 
   const handleDrawerOpen = () => {
@@ -125,6 +126,8 @@ export default function Dashboard() {
         return "Add Task";
       case "/my-tasks":
         return "My Tasks";
+      case "/profile":
+        return "Profile";
       default:
         return "";
     }
@@ -159,7 +162,7 @@ export default function Dashboard() {
       </AppBar>
       <Drawer variant="permanent" open={open}>
         <DrawerHeader className="bg-gray-300">
-          <Tooltip title= {user?.userData?.name} placement="right" arrow>
+          <Tooltip title={user?.userData?.name} placement="right" arrow>
             <Typography
               className="uppercase"
               variant="h6"
@@ -167,7 +170,7 @@ export default function Dashboard() {
               noWrap
               component="div"
             >
-             {user?.userData?.name}
+              {user?.userData?.name}
             </Typography>
           </Tooltip>
 
@@ -282,33 +285,6 @@ export default function Dashboard() {
 
           <Box>
             <Divider />
-            {/* <Tooltip title="Home" placement="right" arrow>
-              <ListItem
-                component={Link}
-                to="/"
-                disablePadding
-                sx={{ display: "block" }}
-              >
-                <ListItemButton
-                  sx={{
-                    minHeight: 48,
-                    justifyContent: open ? "initial" : "center",
-                    px: 2.5,
-                  }}
-                >
-                  <ListItemIcon
-                    sx={{
-                      minWidth: 0,
-                      mr: open ? 3 : "auto",
-                      justifyContent: "center",
-                    }}
-                  >
-                    <HomeIcon className={`${!open && " text-white "}`} />
-                  </ListItemIcon>
-                  <ListItemText primary="Home" sx={{ opacity: open ? 1 : 0 }} />
-                </ListItemButton>
-              </ListItem>
-            </Tooltip> */}
 
             <Tooltip title="profile" placement="right" arrow>
               <ListItem
@@ -353,13 +329,13 @@ export default function Dashboard() {
                   sx={{
                     minHeight: 48,
                     justifyContent: open ? "initial" : "center",
-                    px: 2.5,
+                    px: open ? 2 : 4,
                   }}
                 >
                   <ListItemIcon
                     sx={{
                       minWidth: 0,
-                      mr: open ? 3 : "auto",
+                      mr: open ? 4 : "auto",
                       justifyContent: "center",
                     }}
                   >
@@ -373,6 +349,7 @@ export default function Dashboard() {
         </List>
       </Drawer>
       <Box
+        // sx={{ overflow: "auto" }}
         component="main"
         sx={{
           flexGrow: 1,
