@@ -2,7 +2,27 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "universal-cookie";
 
-const API_URL = "http://localhost:5001/auth"; // Update with your backend URL
+const API_URL = "http://localhost:5001/auth";
+
+export const register = createAsyncThunk(
+  "auth/register",
+  async (userData, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5001/auth/register",
+        userData
+      )
+      return response.data; // Expecting { message: "User registered successfully" }
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data || "Failed to register user data"
+      );
+    }
+  }
+);
+
+// // Update with your backend URL
 // const cookies = new Cookies();
 // const token = cookies.get("Token");
 
@@ -52,7 +72,7 @@ export const loginUser = createAsyncThunk(
 //     const cookies = new Cookies();
 //     const token = cookies.get("Token");
 //     console.log("token", token);
-    
+
 //     if (!token) {
 //       return thunkAPI.rejectWithValue("Token is missing");
 //     }
@@ -74,7 +94,7 @@ export const fetchUserData = createAsyncThunk(
     const cookies = new Cookies();
     const token = cookies.get("Token");
     console.log("token", token);
-    
+
     if (!token) {
       return thunkAPI.rejectWithValue("Token is missing");
     }
@@ -86,11 +106,12 @@ export const fetchUserData = createAsyncThunk(
 
       return response.data;
     } catch (error) {
-      return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
+      return thunkAPI.rejectWithValue(
+        error.response?.data?.message || error.message
+      );
     }
   }
 );
-
 
 // Async Thunk: update User Data
 export const updateUserData = createAsyncThunk(
@@ -258,7 +279,7 @@ const authSlice = createSlice({
       .addCase(fetchUserData.pending, (state) => {
         state.isLoading = true;
       })
-      
+
       // get user information
       .addCase(fetchUserData.fulfilled, (state, action) => {
         state.user = action.payload;

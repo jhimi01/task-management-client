@@ -5,9 +5,7 @@ import "./index.css";
 import SingUp from "./pages/SignUp/SingUp";
 import Login from "./pages/Login/Login";
 import ProfilePage from "./pages/ProfilePage/ProfilePage";
-import PrivateRoute from "./route/PrivateRoute";
 import ForgetPassword from "./pages/ForgetPasswordPage/ForgetPassword";
-import PrivateLoginandSignRoute from "./route/PrivateLoginandSignRoute";
 import SendEmail from "./pages/SendEmailPage/SendEmail";
 import { Bounce, ToastContainer } from "react-toastify";
 import "@mantine/core/styles.css";
@@ -19,16 +17,17 @@ import Home from "./pages/Home/Home";
 import MyTask from "./pages/MyTask/MyTask";
 import store from "./app/store";
 import SingleTask from "./pages/SingleTask/SingleTask";
-// import store from "./store/store";
+// import ProtectedRoute from "./route/ProtectedRoute";
+// import PublicRoute from "./route/PublicRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: (
-      // <PrivateRoute>
+      // <ProtectedRoute>
       <Dashboard />
-      // </PrivateRoute>
     ),
+    // </ProtectedRoute>,
     children: [
       {
         path: "/",
@@ -49,29 +48,35 @@ const router = createBrowserRouter([
       },
       {
         path: "/profile",
-        element: (
-          // <PrivateRoute>
-          <ProfilePage />
-          // </PrivateRoute>
-        ),
+        element: <ProfilePage />,
       },
     ],
   },
+
+  // {
+  //   path: "/",
+  //   element: <PublicRoute />, // Prevent access if logged in
+  //   children: [
+  //     { path: "/signup", element: <SingUp /> },
+  //     { path: "/login", element: <Login /> },
+  //   ],
+  // },
+
   {
     path: "/signup",
     element: (
-      // <PrivateLoginandSignRoute>
+      // <PublicRoute>
       <SingUp />
-      //  </PrivateLoginandSignRoute>
     ),
+    // </PublicRoute> ,
   },
   {
     path: "/login",
     element: (
-      // <PrivateLoginandSignRoute>
+      // <PublicRoute>
       <Login />
-      // </PrivateLoginandSignRoute>
     ),
+    // </PublicRoute>,
   },
   {
     path: "/send-email",
