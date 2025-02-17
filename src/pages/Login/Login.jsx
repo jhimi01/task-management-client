@@ -5,6 +5,7 @@ import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   loginUser,
   // verifyOTP,
@@ -179,8 +180,13 @@ const Login = () => {
   } = useForm();
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [recaptchaToken, setRecaptchaToken] = useState("");
 
   const [showPass, setShowPass] = useState(true);
+
+  function onChange(value) {
+    setRecaptchaToken(value || "");
+  }
 
   const onSubmit = async (data) => {
     try {
@@ -188,7 +194,8 @@ const Login = () => {
         loginUser({
           email: data.email,
           password: data.password,
-        }),
+          recaptchaToken,
+        })
       );
 
       if (loginUser.fulfilled.match(resultAction)) {
@@ -250,6 +257,11 @@ const Login = () => {
                 <p className="text-red-500">{errors.password.message}</p>
               )}
             </div>
+
+            <ReCAPTCHA
+                sitekey="6LchN7gqAAAAAN1x37YAX0nhMkvuta3w_0ZiRElH"
+                onChange={onChange}
+              />
 
             <Link to="/send-email">
               <h4 className="text-xl underline text-primary cursor-pointer">

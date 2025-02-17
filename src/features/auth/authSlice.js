@@ -4,19 +4,39 @@ import Cookies from "universal-cookie";
 
 const API_URL = "http://localhost:5001/auth";
 
-export const register = createAsyncThunk(
-  "auth/register",
+// Async Thunk: Register User
+export const registerUser = createAsyncThunk(
+  "auth/registerUser",
   async (userData, thunkAPI) => {
     try {
       const response = await axios.post(
         "http://localhost:5001/auth/register",
         userData
-      )
-      return response.data; // Expecting { message: "User registered successfully" }
+      );
+      return response.data; // Expecting { message: "User registerUserUsered successfully" }
     } catch (error) {
       console.log(error);
       return thunkAPI.rejectWithValue(
-        error.response?.data || "Failed to register user data"
+        error.response?.data || "Failed to registerUser user "
+      );
+    }
+  }
+);
+
+// Async Thunk: Verify OTP
+export const verifyOTP = createAsyncThunk(
+  "auth/verifyOtp",
+  async ({ email, otp }, thunkAPI) => {
+    try {
+      const response = await axios.post(
+        "http://localhost:5001/auth/verify-otp",
+        { email, otp }
+      );
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return thunkAPI.rejectWithValue(
+        error.response?.data || "Failed to verify OTP"
       );
     }
   }
@@ -65,29 +85,7 @@ export const loginUser = createAsyncThunk(
   }
 );
 
-// Async Thunk: Fetch Logged-in User Data
-// export const fetchUserData = createAsyncThunk(
-//   "auth/fetchUserData",
-//   async (_, thunkAPI) => {
-//     const cookies = new Cookies();
-//     const token = cookies.get("Token");
-//     console.log("token", token);
-
-//     if (!token) {
-//       return thunkAPI.rejectWithValue("Token is missing");
-//     }
-
-//     try {
-//       const response = await axios.get(`${API_URL}/profile`, {
-//         headers: { Authorization: `Bearer ${token}` },
-//       });
-
-//       return response.data; // ✅ Correct way to return response data
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(error.response?.data?.message || error.message);
-//     }
-//   }
-// );
+// Async Thunk: get User Data
 export const fetchUserData = createAsyncThunk(
   "auth/fetchUserData",
   async (_, thunkAPI) => {
@@ -137,7 +135,7 @@ export const updateUserData = createAsyncThunk(
   }
 );
 
-// add img to user information
+// Async Thunk: Image add
 export const imageAdd = createAsyncThunk(
   "auth/imageAdd",
   async (img, { rejectWithValue }) => {
@@ -156,7 +154,7 @@ export const imageAdd = createAsyncThunk(
   }
 );
 
-// reset password
+// Async Thunk: reset password
 export const resetPassword = createAsyncThunk(
   "auth/reset-password",
   async (data, rejectWithValue) => {
@@ -262,6 +260,38 @@ const authSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
+
+      // registerUser
+      .addCase(registerUser.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(registerUser.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.user = action.payload;
+      })
+      .addCase(registerUser.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+
+
+      // Verify OTP
+      .addCase(verifyOTP.pending, (state) => {
+        state.isLoading = true;
+        state.error = null;
+      })
+      .addCase(verifyOTP.fulfilled, (state, action) => {
+        state.isLoading = false;
+        state.isVerified = true;
+        state.user = action.payload;
+      })
+      .addCase(verifyOTP.rejected, (state, action) => {
+        state.isLoading = false;
+        state.error = action.payload;
+      })
+
+
       // login
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
@@ -275,10 +305,12 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
+
       // get user information
       .addCase(fetchUserData.pending, (state) => {
         state.isLoading = true;
       })
+
 
       // get user information
       .addCase(fetchUserData.fulfilled, (state, action) => {
@@ -290,6 +322,7 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.isLoading = false;
       })
+
 
       // update user
       .addCase(updateUserData.pending, (state) => {
@@ -304,11 +337,13 @@ const authSlice = createSlice({
         state.isLoading = false;
       })
 
+
       // add image to the user
       .addCase(imageAdd.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLoading = false;
       })
+
 
       // resetPassword
       .addCase(resetPassword.fulfilled, (state, action) => {
@@ -316,11 +351,13 @@ const authSlice = createSlice({
         state.user = action.payload; // Update user with new data
       })
 
+
       // sendEmail for forgot password reset
       .addCase(sendEmail.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload;
       })
+
 
       // newPassword
       .addCase(newPassword.fulfilled, (state, action) => {
@@ -328,6 +365,7 @@ const authSlice = createSlice({
         state.user = action.payload; // Update user with new data
       })
 
+      
       // logout
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;

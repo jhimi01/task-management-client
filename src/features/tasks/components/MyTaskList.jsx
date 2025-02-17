@@ -10,11 +10,9 @@ import EditModal from "./EditModal";
 
 const MyTaskList = () => {
   const dispatch = useDispatch();
-  const { tasks, isLoading, error } = useSelector((state) => state.tasks);
+  const { tasks, error } = useSelector((state) => state.tasks);
   const [opened, setOpened] = useState(false);
   const [selectedTask, setSelectedTask] = useState(null);
-
-  console.log("tasks", tasks)
 
   useEffect(() => {
     dispatch(fetchMyTasks());

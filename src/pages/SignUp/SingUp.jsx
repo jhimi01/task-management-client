@@ -1,9 +1,14 @@
 import { useForm } from "react-hook-form";
-import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { Eye, EyeClosed, Loader } from "lucide-react";
-import { Bounce, toast } from "react-toastify";
+import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import {
+  clearError,
+  registerUser,
+  verifyOTP,
+} from "../../features/auth/authSlice";
 
 const SignUp = () => {
   const {
@@ -11,6 +16,7 @@ const SignUp = () => {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const dispatch = useDispatch();
 
   const [showOTP, setShowOTP] = useState(false);
   const [otp, setOtp] = useState("");
@@ -21,90 +27,137 @@ const SignUp = () => {
   const navigate = useNavigate();
 
   const onSubmit = async (data) => {
-    setLoading(true);
+    if (data.password !== data.retypePassword) {
+      toast.error("Passwords do not match");
+      return;
+    }
+
     const newUser = {
       email: data.email,
       password: data.password,
       name: data.name,
       userName: data.userName,
     };
-    if (data.password !== data.retypePassword) {
-      setLoading(false);
-      alert("Provide correct password");
-      return;
-    }
+
+    setLoading(true);
+    dispatch(clearError());
 
     try {
-      const response = await axios.post(
-        "http://localhost:5001/auth/register",
-        newUser
-      );
-      if (response.status === 200) {
-        setLoading(false);
-        toast.success("OTP sent to your email", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-        setShowOTP(true);
-      }
+      await dispatch(registerUser(newUser)).unwrap();
+      setLoading(false);
       setEmail(data.email);
+      setShowOTP(true);
 
+      toast.success("OTP sent to your email");
     } catch (error) {
       setLoading(false);
-      toast.error("An error User email already exists", error.message, {
-        position: "top-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: false,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "light",
-        transition: Bounce,
-      });
-      console.error(
-        "Error:",
-        error.response ? error.response.data : error.message
-      );
+      toast.error(error.message || "Failed to register user");
     }
   };
 
   const handleVerifyOTP = async (e) => {
-    setLoading(true);
     e.preventDefault();
+    setLoading(true);
+    dispatch(clearError());
+
     try {
-      const response = await axios.post(
-        "http://localhost:5001/auth/verify-otp",
-        { email, otp }
-      );
-      if (response.status === 200) {
-        setLoading(false);
-        toast.success("User verified successfully", {
-          position: "top-right",
-          autoClose: 5000,
-          hideProgressBar: false,
-          closeOnClick: false,
-          pauseOnHover: true,
-          draggable: true,
-          progress: undefined,
-          theme: "light",
-          transition: Bounce,
-        });
-        navigate("/login");
-      }
+      await dispatch(verifyOTP({ email, otp })).unwrap();
+      setLoading(false);
+
+      toast.success("User verified successfully");
+
+      navigate("/login");
     } catch (error) {
       setLoading(false);
-      console.log(error);
-      alert("Invalid or expired OTP");
+      toast.error(error.message || "Invalid or expired OTP");
     }
   };
+
+  // const onSubmit = async (data) => {
+  //   setLoading(true);
+  //   const newUser = {
+  //     email: data.email,
+  //     password: data.password,
+  //     name: data.name,
+  //     userName: data.userName,
+  //   };
+  //   if (data.password !== data.retypePassword) {
+  //     setLoading(false);
+  //     alert("Provide correct password");
+  //     return;
+  //   }
+
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:5001/auth/register",
+  //       newUser
+  //     );
+  //     if (response.status === 200) {
+  //       setLoading(false);
+  //       toast.success("OTP sent to your email", {
+  //         position: "top-right",
+  //         autoClose: 5000,
+  //         hideProgressBar: false,
+  //         closeOnClick: false,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //         theme: "light",
+  //         transition: Bounce,
+  //       });
+  //       setShowOTP(true);
+  //     }
+  //     setEmail(data.email);
+
+  //   } catch (error) {
+  //     setLoading(false);
+  //     toast.error("An error User email already exists", error.message, {
+  //       position: "top-right",
+  //       autoClose: 5000,
+  //       hideProgressBar: false,
+  //       closeOnClick: false,
+  //       pauseOnHover: true,
+  //       draggable: true,
+  //       progress: undefined,
+  //       theme: "light",
+  //       transition: Bounce,
+  //     });
+  //     console.error(
+  //       "Error:",
+  //       error.response ? error.response.data : error.message
+  //     );
+  //   }
+  // };
+
+  // const handleVerifyOTP = async (e) => {
+  //   setLoading(true);
+  //   e.preventDefault();
+  //   try {
+  //     const response = await axios.post(
+  //       "http://localhost:5001/auth/verify-otp",
+  //       { email, otp }
+  //     );
+  //     if (response.status === 200) {
+  //       setLoading(false);
+  //       toast.success("User verified successfully", {
+  //         position: "top-right",
+  //         autoClose: 5000,
+  //         hideProgressBar: false,
+  //         closeOnClick: false,
+  //         pauseOnHover: true,
+  //         draggable: true,
+  //         progress: undefined,
+  //         theme: "light",
+  //         transition: Bounce,
+  //       });
+  //       navigate("/login");
+  //     }
+  //   } catch (error) {
+  //     setLoading(false);
+  //     console.log(error);
+  //     alert("Invalid or expired OTP");
+  //   }
+  // };
 
   return (
     <div className="bg-gray-100 h-screen">
