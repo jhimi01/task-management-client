@@ -9,7 +9,7 @@ export const fetchMyTasks = createAsyncThunk(
   "tasks/fetchMy",
   async (_, thunkAPI) => {
     const cookies = new Cookies();
-    const token = cookies.get("Token");  // Retrieve token here to ensure it's fresh
+    const token = cookies.get("Token"); // Retrieve token here to ensure it's fresh
 
     if (!token) {
       return thunkAPI.rejectWithValue("Token is missing");
@@ -29,7 +29,6 @@ export const fetchMyTasks = createAsyncThunk(
     }
   }
 );
-
 
 // Fetch a single task
 export const singleTask = createAsyncThunk(

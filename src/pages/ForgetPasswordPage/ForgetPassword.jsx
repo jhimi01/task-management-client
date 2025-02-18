@@ -23,7 +23,6 @@ const ForgetPassword = () => {
     setLoading(false);
     setLoading(true);
     if (data.newpassword === data.confirmpassword) {
-
       dispatch(newPassword({ id, token, newPassword: data.newpassword }))
         .unwrap()
         .then(() => {
@@ -35,7 +34,7 @@ const ForgetPassword = () => {
           console.log(error);
           toast.error("failed");
         });
-        navigate("/login");
+      navigate("/login");
     } else {
       setLoading(false);
       toast.error("confirm password doesn't match");

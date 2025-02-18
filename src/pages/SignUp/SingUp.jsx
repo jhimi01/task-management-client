@@ -23,6 +23,7 @@ const SignUp = () => {
   const [email, setEmail] = useState("");
   const [loading, setLoading] = useState(false);
   const [showPass, setShowPass] = useState(true);
+  const [userData, setUserData] = useState();
 
   const navigate = useNavigate();
 
@@ -31,13 +32,13 @@ const SignUp = () => {
       toast.error("Passwords do not match");
       return;
     }
-
     const newUser = {
       email: data.email,
       password: data.password,
       name: data.name,
       userName: data.userName,
     };
+    setUserData(newUser);
 
     setLoading(true);
     dispatch(clearError());
@@ -60,8 +61,14 @@ const SignUp = () => {
     setLoading(true);
     dispatch(clearError());
 
+    const name = userData.name;
+    const userName = userData.userName;
+    const password = userData.password;
+
     try {
-      await dispatch(verifyOTP({ email, otp })).unwrap();
+      await dispatch(
+        verifyOTP({ email, otp, name, userName, password })
+      ).unwrap();
       setLoading(false);
 
       toast.success("User verified successfully");
@@ -72,6 +79,8 @@ const SignUp = () => {
       toast.error(error.message || "Invalid or expired OTP");
     }
   };
+
+  // console.log('user data ', userData)
 
   return (
     <div className="bg-gray-100 h-screen">

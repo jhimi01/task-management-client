@@ -9,10 +9,7 @@ export const registerUser = createAsyncThunk(
   "auth/registerUser",
   async (userData, thunkAPI) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5001/auth/register",
-        userData
-      );
+      const response = await axios.post(`${API_URL}/register`, userData);
       return response.data; // Expecting { message: "User registerUserUsered successfully" }
     } catch (error) {
       console.log(error);
@@ -26,12 +23,15 @@ export const registerUser = createAsyncThunk(
 // Async Thunk: Verify OTP
 export const verifyOTP = createAsyncThunk(
   "auth/verifyOtp",
-  async ({ email, otp }, thunkAPI) => {
+  async ({ email, otp, name, userName, password }, thunkAPI) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5001/auth/verify-otp",
-        { email, otp }
-      );
+      const response = await axios.post(`${API_URL}/verify-otp`, {
+        email,
+        otp,
+        name,
+        userName,
+        password,
+      });
       return response.data;
     } catch (error) {
       console.log(error);
@@ -42,38 +42,13 @@ export const verifyOTP = createAsyncThunk(
   }
 );
 
-// // Update with your backend URL
-// const cookies = new Cookies();
-// const token = cookies.get("Token");
-
-// Async Thunk: Login (Request OTP)
-// export const loginUser = createAsyncThunk(
-//   "auth/loginUser",
-//   async (userData, thunkAPI) => {
-//     const cookies = new Cookies();
-//     try {
-//       const response = await axios.post(
-//         `http://localhost:5001/auth/login`,
-//         userData
-//       );
-//       cookies.set("Token", response.data.token, { path: "/" });
-//       return response.data; // Expecting { message: "OTP sent to your email" }
-//     } catch (error) {
-//       return thunkAPI.rejectWithValue(
-//         error.response?.data || "Failed to Login user data"
-//       );
-//     }
-//   }
-// );
+// Async Thunk: login
 export const loginUser = createAsyncThunk(
   "auth/loginUser",
   async (userData, thunkAPI) => {
     const cookies = new Cookies();
     try {
-      const response = await axios.post(
-        "http://localhost:5001/auth/login",
-        userData
-      );
+      const response = await axios.post(`${API_URL}/login`, userData);
       cookies.set("Token", response.data.token, { path: "/" });
       thunkAPI.dispatch(fetchUserData()); // Fetch user data after setting the token
       return response.data;
@@ -96,7 +71,7 @@ export const fetchUserData = createAsyncThunk(
     if (!token) {
       window.location.href = "/login";
       return thunkAPI.rejectWithValue("Token is missing");
-    } 
+    }
 
     try {
       const response = await axios.get(`${API_URL}/profile`, {
@@ -118,19 +93,16 @@ export const updateUserData = createAsyncThunk(
   async (userData, thunkAPI) => {
     const cookies = new Cookies();
     const token = cookies.get("Token");
+
     try {
-      const response = await axios.put(
-        "http://localhost:5001/auth/profile", // Ensure this endpoint is correct
-        userData,
-        {
-          headers: { Authorization: `Bearer ${token}` }, // Pass token for auth
-          "Content-Type": "application/json",
-        }
-      );
-      return response.data; // Return updated user data
+      const response = await axios.put(`${API_URL}/profile`, userData, {
+        headers: { Authorization: `Bearer ${token}` },
+        "Content-Type": "application/json",
+      });
+      return response.data;
     } catch (error) {
       return thunkAPI.rejectWithValue(
-        error.response?.data || "Failed to update user data"
+        error.response?.data?.error || "Failed to update user data"
       );
     }
   }
@@ -144,7 +116,7 @@ export const imageAdd = createAsyncThunk(
     const token = cookies.get("Token");
     try {
       const response = await axios.put(
-        "http://localhost:5001/auth/edit-image",
+        `${API_URL}/edit-image`,
         { img }, // Make sure the key matches what the backend expects
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -160,16 +132,12 @@ export const resetPassword = createAsyncThunk(
   "auth/reset-password",
   async (data, rejectWithValue) => {
     try {
-      const response = await axios.post(
-        "http://localhost:5001/auth/reset-password",
-        data,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json",
-          },
-        }
-      );
+      const response = await axios.post(`${API_URL}/reset-password`, data, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        },
+      });
       cookies.set("Token", response.data.token, { path: "/" });
       return response.data;
     } catch (error) {
@@ -185,7 +153,7 @@ export const sendEmail = createAsyncThunk(
   async (email, rejectWithValue) => {
     try {
       const response = await axios.post(
-        `http://localhost:5001/auth/sendemail-forgotpassword`,
+        `${API_URL}/sendemail-forgotpassword`,
         email,
         {
           headers: {
@@ -207,7 +175,7 @@ export const newPassword = createAsyncThunk(
   async ({ id, token, newPassword }, thunkAPI) => {
     try {
       const response = await axios.post(
-        `http://localhost:5001/auth/forgot-password/${id}/${token}`,
+        `${API_URL}/forgot-password/${id}/${token}`,
         { newPassword },
         {
           headers: { "Content-Type": "application/json" },
@@ -276,7 +244,6 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-
       // Verify OTP
       .addCase(verifyOTP.pending, (state) => {
         state.isLoading = true;
@@ -292,7 +259,6 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-
       // login
       .addCase(loginUser.pending, (state) => {
         state.isLoading = true;
@@ -306,12 +272,10 @@ const authSlice = createSlice({
         state.error = action.payload;
       })
 
-
       // get user information
       .addCase(fetchUserData.pending, (state) => {
         state.isLoading = true;
       })
-
 
       // get user information
       .addCase(fetchUserData.fulfilled, (state, action) => {
@@ -323,7 +287,6 @@ const authSlice = createSlice({
         state.user = action.payload;
         state.isLoading = false;
       })
-
 
       // update user
       .addCase(updateUserData.pending, (state) => {
@@ -338,13 +301,11 @@ const authSlice = createSlice({
         state.isLoading = false;
       })
 
-
       // add image to the user
       .addCase(imageAdd.fulfilled, (state, action) => {
         state.user = action.payload;
         state.isLoading = false;
       })
-
 
       // resetPassword
       .addCase(resetPassword.fulfilled, (state, action) => {
@@ -352,13 +313,11 @@ const authSlice = createSlice({
         state.user = action.payload; // Update user with new data
       })
 
-
       // sendEmail for forgot password reset
       .addCase(sendEmail.fulfilled, (state, action) => {
         state.isLoading = false;
         state.user = action.payload;
       })
-
 
       // newPassword
       .addCase(newPassword.fulfilled, (state, action) => {
@@ -366,7 +325,6 @@ const authSlice = createSlice({
         state.user = action.payload; // Update user with new data
       })
 
-      
       // logout
       .addCase(logoutUser.fulfilled, (state) => {
         state.user = null;

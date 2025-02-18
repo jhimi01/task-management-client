@@ -10,7 +10,6 @@ const EditProfileModal = ({ isOpen, onClose, selectedUser }) => {
   const dispatch = useDispatch();
   const [emailError, setEmailError] = useState("");
 
-
   const {
     register,
     handleSubmit,
@@ -32,12 +31,13 @@ const EditProfileModal = ({ isOpen, onClose, selectedUser }) => {
     try {
       await dispatch(updateUserData(data)).unwrap();
       onClose(); // Close the modal after successful update
-      toast.success("updated successfully")
+      toast.success("Profile updated successfully");
     } catch (error) {
-      if (error.message === "Email is already in use") {
-        setEmailError("Email is already in use");
+      if (error === "Email is already in use") {
+        setEmailError("This email address is already in use");
       } else {
-        console.error("Error updating user data:", error.message);
+        console.error("Error updating user data:", error);
+        toast.error("Failed to update profile");
       }
     }
   };
