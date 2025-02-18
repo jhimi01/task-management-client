@@ -5,7 +5,7 @@ import axios from "axios";
 const VerifyOtp = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { email } = location.state; // Retrieve email passed from SignUp form
+  const { email } = location.state;
   const [otp, setOtp] = useState("");
   const [error, setError] = useState("");
 

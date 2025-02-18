@@ -94,8 +94,9 @@ export const fetchUserData = createAsyncThunk(
     console.log("token", token);
 
     if (!token) {
+      window.location.href = "/login";
       return thunkAPI.rejectWithValue("Token is missing");
-    }
+    } 
 
     try {
       const response = await axios.get(`${API_URL}/profile`, {

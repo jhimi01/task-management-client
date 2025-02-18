@@ -1,7 +1,6 @@
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { addTask } from "../taskSlice";
-// import { showNotification } from "@mantine/notifications";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
@@ -37,8 +36,6 @@ const TaskForm = () => {
       toast.error('Failed adding task')
       console.log("error", e);
     }
-
-    // Ensure dueDate is in ISO-8601 format (with time component)
   };
 
   return (
@@ -93,32 +90,6 @@ const TaskForm = () => {
                 )}
               </div>
             </div>
-
-            {/* Status */}
-            {/* <div className="md:flex">
-              <label
-                htmlFor="status"
-                className="block text-lg md:w-[30%] font-medium mb-1 md:mb-3"
-              >
-                Status:
-              </label>
-              <div className="w-full">
-                <select
-                  id="status"
-                  {...register("status", { required: "Status is required" })}
-                  className="w-full p-2 focus:outline-none border border-gray-300"
-                >
-                  <option value="">Select Status</option>
-                  <option value="pending">Pending</option>
-                  <option value="completed">Completed</option>
-                </select>
-                {errors.status && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.status.message}
-                  </p>
-                )}
-              </div>
-            </div> */}
 
             {/* Description */}
             <div className="md:flex">

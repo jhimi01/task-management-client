@@ -33,9 +33,21 @@ This project uses **Redux Toolkit** for efficient state management and API integ
 - npm or yarn
 - PostgreSQL (if running locally)
 
-### Installation
+### Installation for frontend
 ```sh
 git clone https://github.com/jhimi01/task-management-client.git
+cd project-directory
+npm install
+```
+
+### Running Locally for frontend
+```sh
+npm run dev
+```
+
+### Installation for backend
+```sh
+git clone https://github.com/jhimi01/task-management-server.git
 cd project-directory
 npm install
 ```
@@ -43,51 +55,9 @@ npm install
 ### Environment Variables
 I will send this to your email
 
-### Running Locally
+### Running Locally for backend
 ```sh
-npm run dev
-```
-
----
-
-## API Documentation
-### Authentication
-#### `POST /api/login`
-**Request:**
-```json
-{
-  "email": "user@example.com",
-  "password": "password123"
-}
-```
-**Response:**
-```json
-{
-  "token": "eyJhbGciOiJIUzI1NiIs...",
-  "user": {
-    "id": 1,
-    "email": "user@example.com"
-  }
-}
-```
-
-### Tasks
-#### `GET /api/tasks`
-**Headers:**
-```json
-{
-  "Authorization": "Bearer <token>"
-}
-```
-**Response:**
-```json
-[
-  {
-    "id": 1,
-    "title": "Complete Redux setup",
-    "completed": false
-  }
-]
+nodemon server.ts
 ```
 
 ---
@@ -96,28 +66,11 @@ npm run dev
 ### Implemented Practices
 - **Password Hashing**: User passwords are hashed using bcrypt.
 - **JWT Authentication**: Tokens are validated and stored securely.
-- **Input Validation**: Backend APIs validate inputs to prevent SQL injection and XSS attacks.
-- **CORS Policies**: Configured to allow only whitelisted domains.
 
 ---
 
 ## Deployment
 ### Live URL (Optional)
-[Your Deployed Link Here]
-
-### Deployment Instructions
-For deploying to Vercel or Netlify:
-```sh
-vercel deploy
-```
-For backend deployment (e.g., on Render or DigitalOcean):
-```sh
-docker build -t my-app .
-docker run -p 5000:5000 my-app
-```
-
----
-
-## License
-[Your License Here]
-
+couldn't be able to provide a live URL
+but here is the video link for the overview of this project
+[https://github.com/]

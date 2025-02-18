@@ -8,7 +8,8 @@ import { fetchUserData } from "../../features/auth/authSlice";
 
 const ProfilePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] = useState(false);
+  const [isResetPasswordModalOpen, setIsResetPasswordModalOpen] =
+    useState(false);
   const [selectedUser, setSelectedUser] = useState({});
   const [resetPassword, setResetPassword] = useState({});
 
@@ -119,7 +120,7 @@ const ProfilePage = () => {
         />
       )}
 
- {/* change password Modals */}
+      {/* change password Modals */}
       <ResetPasswordModal
         isOpen={isResetPasswordModalOpen}
         onClose={() => setIsResetPasswordModalOpen(false)}

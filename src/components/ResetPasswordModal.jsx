@@ -1,6 +1,4 @@
 import { useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { resetPassword } from "@/redux/authSlice"; // Adjust the path
 import PropTypes from "prop-types";
 import { Eye, EyeClosed } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";

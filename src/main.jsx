@@ -17,17 +17,11 @@ import Home from "./pages/Home/Home";
 import MyTask from "./pages/MyTask/MyTask";
 import store from "./app/store";
 import SingleTask from "./pages/SingleTask/SingleTask";
-// import ProtectedRoute from "./route/ProtectedRoute";
-// import PublicRoute from "./route/PublicRoute";
 
 const router = createBrowserRouter([
   {
     path: "/",
-    element: (
-      // <ProtectedRoute>
-      <Dashboard />
-    ),
-    // </ProtectedRoute>,
+    element: <Dashboard />,
     children: [
       {
         path: "/",
@@ -37,7 +31,6 @@ const router = createBrowserRouter([
         path: "/add-task",
         element: <AddTask />,
       },
-
       {
         path: "/my-tasks",
         element: <MyTask />,
@@ -53,30 +46,13 @@ const router = createBrowserRouter([
     ],
   },
 
-  // {
-  //   path: "/",
-  //   element: <PublicRoute />, // Prevent access if logged in
-  //   children: [
-  //     { path: "/signup", element: <SingUp /> },
-  //     { path: "/login", element: <Login /> },
-  //   ],
-  // },
-
   {
     path: "/signup",
-    element: (
-      // <PublicRoute>
-      <SingUp />
-    ),
-    // </PublicRoute> ,
+    element: <SingUp />,
   },
   {
     path: "/login",
-    element: (
-      // <PublicRoute>
-      <Login />
-    ),
-    // </PublicRoute>,
+    element: <Login />,
   },
   {
     path: "/send-email",

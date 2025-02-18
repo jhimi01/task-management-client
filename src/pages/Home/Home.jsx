@@ -15,7 +15,6 @@ const Home = () => {
   );
 
   const { user, authToken } = useSelector((state) => state.auth);
-  console.log(user, authToken);
 
   useEffect(() => {
     dispatch(fetchUserData());

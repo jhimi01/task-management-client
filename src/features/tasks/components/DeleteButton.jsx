@@ -10,7 +10,7 @@ const DeleteButton = ({ id }) => {
 
   const handleDelete = async (id) => {
     try {
-      await dispatch(deleteTask(id)).unwrap(); // unwrap returns a promise for the fulfilled state
+      await dispatch(deleteTask(id)).unwrap();
       toast.success("Item deleted successfully");
     } catch (err) {
       toast.error("Failed deleting task");
@@ -32,8 +32,8 @@ const DeleteButton = ({ id }) => {
   );
 };
 
-DeleteButton.prototypes = {
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+DeleteButton.propTypes = {
+  id: PropTypes.any.isRequired,
 };
 
 export default DeleteButton;

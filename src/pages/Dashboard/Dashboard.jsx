@@ -347,7 +347,6 @@ export default function Dashboard() {
                       justifyContent: "center",
                     }}
                   >
-                    {/* <LogOut className={`${!open && " text-white "}`} /> */}
                     <LogoutButton open={open} />
                   </ListItemIcon>
                 </ListItemButton>
@@ -357,7 +356,6 @@ export default function Dashboard() {
         </List>
       </Drawer>
       <Box
-        // sx={{ overflow: "auto" }}
         component="main"
         sx={{
           flexGrow: 1,
@@ -366,8 +364,6 @@ export default function Dashboard() {
             md: 6,
           },
           backgroundColor: "#eceff1",
-          // height: '100vh',
-          // backgroundAttachment: 'fixed'
         }}
       >
         <DrawerHeader />
