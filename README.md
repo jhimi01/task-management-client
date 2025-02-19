@@ -45,20 +45,42 @@ npm install
 npm run dev
 ```
 
-### Installation for backend
+
+# Task Management Backend Setup
+
+## 🚀 Installation & Setup Guide
+
+### 1️⃣ Clone the Repository  
 ```sh
 git clone https://github.com/jhimi01/task-management-server.git
-cd project-directory
+cd task-management-server
+```
+
+### 2️⃣ Install Dependencies  
+```sh
 npm install
 ```
 
-### Environment Variables
-I will send this to your email
+### 3️⃣ Set Up Environment Variables  
+- Create a `.env` file in the root directory.  
+- The required environment variables will be shared separately.  
+- Copy and paste the provided values into your `.env` file.  
 
-### Running Locally for backend
+### 4️⃣ Set Up Database  
+- Ensure PostgreSQL is installed and running on your system.  
+- Update the `.env` file with your local `DATABASE_URL`.  
+- Run the following command to apply database migrations:  
+  ```sh
+  npx prisma migrate dev --name init
+  ```
+
+### 5️⃣ Start the Server  
 ```sh
 nodemon server.ts
 ```
+Your backend should now be running locally! 🚀
+
+
 
 ---
 
@@ -73,4 +95,4 @@ nodemon server.ts
 ### Live URL (Optional)
 couldn't be able to provide a live URL
 but here is the video link for the overview of this project
-[https://github.com/]
+[https://docs.google.com/document/d/1GDEI11xQYX2WoUgsJL4fM2Vt6VhZHiLHLw7n5RowOXI/edit?usp=sharing]
