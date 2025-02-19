@@ -34,9 +34,15 @@ This project uses **Redux Toolkit** for efficient state management and API integ
 - PostgreSQL (if running locally)
 
 ### Installation for frontend
+
+### 1️⃣ Clone the Repository 
 ```sh
 git clone https://github.com/jhimi01/task-management-client.git
 cd project-directory
+```
+
+### 2️⃣ Install Dependencies  
+```sh
 npm install
 ```
 
@@ -69,10 +75,10 @@ npm install
 ### 4️⃣ Set Up Database  
 - Ensure PostgreSQL is installed and running on your system.  
 - Update the `.env` file with your local `DATABASE_URL`.  
-- Run the following command to apply database migrations:  
-  ```sh
-  npx prisma migrate dev --name init
-  ```
+- Run Prisma Migration (This creates the DB if it doesn’t exist)
+```sh
+npx prisma migrate dev --name init
+```
 
 ### 5️⃣ Start the Server  
 ```sh
