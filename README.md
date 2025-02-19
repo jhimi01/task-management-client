@@ -124,7 +124,7 @@ Managing global state with Redux Toolkit allows for efficient API caching, strea
 JWT provides secure, stateless authentication, reducing server load and improving security. Tokens are stored in httpOnly cookies to prevent XSS attacks.  
 
 ### Why Google reCAPTCHA?  
-To prevent bot attacks, we implemented Google reCAPTCHA on login and registration pages, ensuring only real users can access the system.  
+To prevent bot attacks, we implemented Google reCAPTCHA on the login page, ensuring only real users can access the system.  
 
 
 ---
