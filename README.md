@@ -30,10 +30,11 @@ This project uses **Redux Toolkit** for efficient state management and API integ
 ## Setup Instructions
 ### Prerequisites
 - Node.js (v16+)
-- npm or yarn
+- npm
 - PostgreSQL (if running locally)
 
-### Installation for frontend
+
+## 🚀 Installation & Guide for Frontend Setup
 
 ### 1️⃣ Clone the Repository 
 ```sh
@@ -52,9 +53,7 @@ npm run dev
 ```
 
 
-# Task Management Backend Setup
-
-## 🚀 Installation & Setup Guide
+## 🚀 Installation & Guide for Backend Setup
 
 ### 1️⃣ Clone the Repository  
 ```sh
