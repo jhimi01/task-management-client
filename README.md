@@ -90,7 +90,7 @@ Your backend should now be running locally! 🚀
 
 ## Api Documentation
 
-Thses apis are protected by token which is stored in the cookie
+These APIs are protected by tokens that are stored in the cookie.
 
 ### authentication endpoint
 
