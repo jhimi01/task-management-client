@@ -115,7 +115,7 @@ Your backend should now be running locally! 🚀
 ## Design Decisions  
 
 ### Why Prisma with PostgreSQL?  
-We chose PostgreSQL for its scalability and Prisma for its developer-friendly ORM features. Prisma provides type safety, auto-generated queries, and efficient database migrations, making it the best choice for structured database management.  
+I chose PostgreSQL for its scalability and Prisma for its developer-friendly ORM features. Prisma provides type safety, auto-generated queries, and efficient database migrations, making it the best choice for structured database management.  
 
 ### Why Redux Toolkit?  
 Managing global state with Redux Toolkit allows for efficient API caching, streamlined async requests, and normalized data handling, reducing unnecessary re-renders.  
@@ -124,7 +124,7 @@ Managing global state with Redux Toolkit allows for efficient API caching, strea
 JWT provides secure, stateless authentication, reducing server load and improving security. Tokens are stored in httpOnly cookies to prevent XSS attacks.  
 
 ### Why Google reCAPTCHA?  
-To prevent bot attacks, we implemented Google reCAPTCHA on the login page, ensuring only real users can access the system.  
+To prevent bot attacks, I implemented Google reCAPTCHA on the login page, ensuring only real users can access the system.  
 
 
 ---
