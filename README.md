@@ -95,4 +95,4 @@ Your backend should now be running locally! 🚀
 ### Live URL (Optional)
 couldn't be able to provide a live URL
 but here is the video link for the overview of this project
-[https://docs.google.com/document/d/1GDEI11xQYX2WoUgsJL4fM2Vt6VhZHiLHLw7n5RowOXI/edit?usp=sharing]
+[https://drive.google.com/file/d/1il722hlrHCU_nciBs1Sysk5goc0VQL9Y/view?usp=sharing]
