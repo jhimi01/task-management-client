@@ -90,6 +90,8 @@ Your backend should now be running locally! 🚀
 
 ## Api Documentation
 
+Thses apis are protected by token which is stored in the cookie
+
 ### authentication endpoint
 
 - POST /auth/register (for register account)
