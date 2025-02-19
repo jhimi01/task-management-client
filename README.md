@@ -85,6 +85,46 @@ nodemon server.ts
 ```
 Your backend should now be running locally! 🚀
 
+---
+
+
+## Api Documentation
+
+### authentication endpoint
+
+- POST /auth/register (for register account)
+- POST /auth/verify-otp (for verification)
+- POST /auth/login (for Login account)
+- GET /auth/profile (to get a authenticated user)
+- PUT /auth/profile (for update profile information)
+- PUT /auth/edit-image (for update/add profile Image)
+- DELETE /auth/logout (for logout)
+- POST /auth/reset-password (for change password)
+- POST /auth/sendemail-forgotpassword (This send an email for a reset password)
+- POST /auth/forgot-password/:id/:token (reset password)
+
+### tasks endpoint
+
+- GET /auth/tasks (get tasks)
+- GET /auth/tasks/:id (get a specific task)
+- POST /auth/tasks (add a task) 
+- PUT /auth/tasks/:id (update a task)
+- DELETE /auth/tasks/:id (delete a task)
+
+
+## Design Decisions  
+
+### Why Prisma with PostgreSQL?  
+We chose PostgreSQL for its scalability and Prisma for its developer-friendly ORM features. Prisma provides type safety, auto-generated queries, and efficient database migrations, making it the best choice for structured database management.  
+
+### Why Redux Toolkit?  
+Managing global state with Redux Toolkit allows for efficient API caching, streamlined async requests, and normalized data handling, reducing unnecessary re-renders.  
+
+### Why JWT Authentication?  
+JWT provides secure, stateless authentication, reducing server load and improving security. Tokens are stored in httpOnly cookies to prevent XSS attacks.  
+
+### Why Google reCAPTCHA?  
+To prevent bot attacks, we implemented Google reCAPTCHA on login and registration pages, ensuring only real users can access the system.  
 
 
 ---
