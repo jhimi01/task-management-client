@@ -104,7 +104,7 @@ export default function Dashboard() {
     dispatch(fetchUserData());
   }, [dispatch]);
   const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  const isMobile = useMediaQuery(theme.breakpoints.down("md"));
   const [open, setOpen] = React.useState(!isMobile);
   const location = useLocation();
 
