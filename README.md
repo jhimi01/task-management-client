@@ -74,9 +74,9 @@ npm install
 ### 4️⃣ Set Up Database  
 - Ensure PostgreSQL is installed and running on your system.  
 - Update the `.env` file with your local `DATABASE_URL`.  
-- Run Prisma Migration (This creates the DB if it doesn’t exist)
+- Run Prisma Migration
 ```sh
-npx prisma migrate dev --name init
+npx prisma migrate dev
 ```
 
 ### 5️⃣ Start the Server  
