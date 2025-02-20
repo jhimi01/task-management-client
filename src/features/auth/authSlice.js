@@ -66,7 +66,6 @@ export const fetchUserData = createAsyncThunk(
   async (_, thunkAPI) => {
     const cookies = new Cookies();
     const token = cookies.get("Token");
-    console.log("token", token);
 
     if (!token) {
       window.location.href = "/login";

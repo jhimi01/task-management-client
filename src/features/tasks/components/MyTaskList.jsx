@@ -127,7 +127,6 @@ const MyTaskList = () => {
           {/* pagination */}
           <div className="mt-4 flex items-center justify-center">
             <Pagination
-              center
               total={Math.ceil(tasks.length / itemsPerPage)}
               value={currentPage}
               color="#5c0931"
