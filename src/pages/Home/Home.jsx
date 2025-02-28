@@ -7,6 +7,7 @@ import { useEffect } from "react";
 import { fetchMyTasks } from "../../features/tasks/taskSlice";
 import { Link } from "react-router";
 import { fetchUserData } from "../../features/auth/authSlice";
+import { Skeleton } from "@mantine/core";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -28,14 +29,25 @@ const Home = () => {
   const completedTask = tasks?.filter(
     (pending) => pending.status === "completed"
   );
-  if (isLoading) return <p>Loading tasks...</p>;
+  if (isLoading) return <div>
+    <Skeleton height={140} width="100%" color="blue" style={{ backgroundColor: "#34D399" }}  />
+    <div className="grid my-7 md:grid-cols-3 grid-cols-2 gap-2 md:gap-5">
+    <Skeleton height={140} color="blue" style={{ backgroundColor: "#34D399" }}  />
+    <Skeleton height={140} color="blue" style={{ backgroundColor: "#34D399" }}  />
+    <Skeleton height={140} color="blue" style={{ backgroundColor: "#34D399" }}  />
+    </div>
+   <div className="space-y-3 mt-10">
+   <Skeleton height={40} color="blue" style={{ backgroundColor: "#34D399" }}  />
+   <Skeleton height={40} color="blue" style={{ backgroundColor: "#34D399" }}  />
+   </div>
+</div>;
   if (error) return <p>Error: {error}</p>;
   return (
     <div>
       <div className="bg-gradient-to-r from-[#5c0931] to-[#ac2365] text-white md:px-10 px-5 md:py-0 py-4 items-center md:flex justify-between">
         <div className="space-y-3">
           <h2 className="text-5xl capitalize font-serif">
-            Hi, <span>{user?.userData?.name}</span>{" "}
+            Hi, <span>{user?.userData?.name}</span>
           </h2>
           <p className="text-sm text-gray-200">
             Checkout any completed project and recent project below

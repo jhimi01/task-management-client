@@ -1,4 +1,4 @@
-# Task Management System
+# Task And Profile Management System
 
 ## Overview
 This project is a [brief description of the project], designed using React, Redux for state management, and integrated with REST APIs for data handling. The application follows best practices for security and scalability.
@@ -8,6 +8,7 @@ This project is a [brief description of the project], designed using React, Redu
 - User register with a otp
 - User login with password, email and a google recaptcha
 - Logout
+- Change password and Forget password
 - Update profile included with (name, username, add bio and add image)
 - Reset Password and forgot password
 - Task management system(CRUD operation)

@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { singleTask } from "../../features/tasks/taskSlice";
+import { Skeleton } from "@mantine/core";
 
 const SingleTask = () => {
   const { id } = useParams();
@@ -12,8 +13,18 @@ const SingleTask = () => {
     dispatch(singleTask({ id }));
   }, [dispatch, id]);
 
-  if (isLoading) return <div className="flex items-center justify-center h-screen text-xl font-semibold">Loading...</div>;
-  if (error) return <div className="flex items-center justify-center h-screen text-red-500 font-semibold">Error: {error}</div>;
+  if (isLoading)
+    return (
+      <div className="flex items-center justify-center h-screen text-xl font-semibold">
+        Loading...
+      </div>
+    );
+  if (error)
+    return (
+      <div className="flex items-center justify-center h-screen text-red-500 font-semibold">
+        Error: {error}
+      </div>
+    );
 
   return (
     <div className="flex justify-center items-center h-[80vh] p-6">
@@ -21,22 +32,27 @@ const SingleTask = () => {
         <div className="bg-white shadow-lg  max-w-2xl w-full">
           {/* Title & Status */}
           <div className="flex items-center bg-gray-300 p-4 justify-between">
-            <h1 className="text-3xl font-bold text-gray-800 capitalize">{task?.title}</h1>
+            <h1 className="text-3xl font-bold text-gray-800 capitalize">
+              {task?.title}
+            </h1>
             <span
               className={`px-4 py-1 text-sm font-semibold rounded-full ${
-                task?.status === "completed" ? "bg-green-100 text-green-600" : "bg-gray-200 text-gray-600"
+                task?.status === "completed"
+                  ? "bg-green-100 text-green-600"
+                  : "bg-gray-200 text-gray-600"
               }`}
             >
               {task?.status}
             </span>
           </div>
-{/* 
+          {/* 
           <hr /> */}
 
           {/* Task Details */}
           <div className="space-y-2 mt-2 text-gray-700 p-4">
             <p className="">
-              <span className="font-semibold text-gray-900">User ID:</span> {task?.userId}
+              <span className="font-semibold text-gray-900">User ID:</span>{" "}
+              {task?.userId}
             </p>
             <p className="">
               <span className="font-semibold text-gray-900">End Date:</span>{" "}
@@ -70,15 +86,22 @@ const SingleTask = () => {
                   minute: "2-digit",
                 })}
               </p>
-            ) : <p></p>}
+            ) : (
+              <p></p>
+            )}
 
             <p className="">
-              <span className="font-semibold text-gray-900">Description:</span> {task?.description}
+              <span className="font-semibold text-gray-900">Description:</span>{" "}
+              {task?.description}
             </p>
           </div>
         </div>
       ) : (
-        <div className="text-xl font-semibold text-gray-600">No task found</div>
+        <Skeleton
+          height={300}
+          width="70%"
+          style={{ backgroundColor: "#34D399" }}
+        />
       )}
     </div>
   );

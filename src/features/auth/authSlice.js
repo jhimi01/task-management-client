@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axios from "axios";
 import Cookies from "universal-cookie";
 
-const API_URL = "http://localhost:5001/auth";
+const API_URL = "https://task-management-server-pmpg.vercel.app/auth";
 
 // Async Thunk: Register User
 export const registerUser = createAsyncThunk(

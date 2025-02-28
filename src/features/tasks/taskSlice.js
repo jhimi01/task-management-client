@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import Cookies from "universal-cookie";
 
 // API Base URL (adjust as needed)
-const API_BASE_URL = "http://localhost:5001/auth";
+const API_BASE_URL = "https://task-management-server-pmpg.vercel.app/auth";
 
 // Fetch logged-in user's tasks
 export const fetchMyTasks = createAsyncThunk(
