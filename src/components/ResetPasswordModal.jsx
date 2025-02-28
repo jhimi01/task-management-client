@@ -1,14 +1,15 @@
 import { useState } from "react";
 import PropTypes from "prop-types";
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed, Loader } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import { resetPassword } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
 
-const ResetPasswordModal = ({ isOpen, onClose, resetPassworddata }) => {
+const ResetPasswordModal = ({ isOpen, onClose, resetPassworddata, }) => {
   const dispatch = useDispatch();
-  const { isLoading, error } = useSelector((state) => state.auth); // Adjust according to your state structure
+  const { error } = useSelector((state) => state.auth); // Adjust according to your state structure
 
+  const [isLoading, setIsLoading] = useState(false);
   const [oldPassword, setOldPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
@@ -18,6 +19,7 @@ const ResetPasswordModal = ({ isOpen, onClose, resetPassworddata }) => {
 
   const handleSave = () => {
     setLocalError("");
+    setIsLoading(true)
 
     if (newPassword.length < 6) {
       setLocalError("Password must be at least 6 characters long");
@@ -34,6 +36,7 @@ const ResetPasswordModal = ({ isOpen, onClose, resetPassworddata }) => {
     dispatch(resetPassword({ email, oldPassword, newPassword }))
       .unwrap()
       .then(() => {
+        setIsLoading(false)
         toast.success("Password reset successfully");
         setOldPassword("");
         setNewPassword("");
@@ -41,6 +44,7 @@ const ResetPasswordModal = ({ isOpen, onClose, resetPassworddata }) => {
         onClose();
       })
       .catch((err) => {
+        setIsLoading(false)
         setLocalError(err.message || "Failed to reset password");
       });
   };
@@ -118,9 +122,9 @@ const ResetPasswordModal = ({ isOpen, onClose, resetPassworddata }) => {
           <button
             onClick={handleSave}
             disabled={isLoading}
-            className="px-4 py-2 bg-primary text-white rounded"
+            className="px-4 py-2 bg-primary text-white rounded flex items-center gap-1"
           >
-            {isLoading ? "Saving..." : "Save"}
+            <span>Save</span> {isLoading && <Loader className={isLoading && "animate-spin"} />}
           </button>
         </div>
       </div>

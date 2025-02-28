@@ -5,10 +5,12 @@ import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { updateUserData } from "../features/auth/authSlice";
 import { toast } from "react-toastify";
+import { Loader } from "lucide-react";
 
 const EditProfileModal = ({ isOpen, onClose, selectedUser }) => {
   const dispatch = useDispatch();
   const [emailError, setEmailError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -28,11 +30,14 @@ const EditProfileModal = ({ isOpen, onClose, selectedUser }) => {
   }, [selectedUser, setValue]);
 
   const onSubmit = async (data) => {
+    setIsLoading(true)
     try {
       await dispatch(updateUserData(data)).unwrap();
       onClose(); // Close the modal after successful update
       toast.success("Profile updated successfully");
+      setIsLoading(false)
     } catch (error) {
+      setIsLoading(false)
       if (error === "Email is already in use") {
         setEmailError("This email address is already in use");
       } else {
@@ -89,10 +94,10 @@ const EditProfileModal = ({ isOpen, onClose, selectedUser }) => {
         />
 
         <Group position="right" mt="md">
-          <Button variant="outline" onClick={onClose}>
+          <Button variant="outline" color="#5c0931" onClick={onClose}>
             Cancel
           </Button>
-          <Button type="submit">Save Changes</Button>
+          <Button type="submit" className="bg-primary" bg={'#5c0931'} disabled={isLoading}  >Save Changes {isLoading && <Loader className={isLoading && "animate-spin"} />}</Button>
         </Group>
       </form>
     </Modal>
