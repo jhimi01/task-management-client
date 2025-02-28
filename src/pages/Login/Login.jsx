@@ -1,6 +1,6 @@
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { Eye, EyeClosed } from "lucide-react";
+import { Eye, EyeClosed, Loader } from "lucide-react";
 import ReCAPTCHA from "react-google-recaptcha";
 import { toast } from "react-toastify";
 import { useState } from "react";
@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 
 import { loginUser } from "../../features/auth/authSlice";
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -26,6 +27,7 @@ const Login = () => {
   console.log("recaptchaToken", recaptchaToken)
 
   const onSubmit = async (data) => {
+    setIsLoading(true)
     try {
       const resultAction = await dispatch(
         loginUser({
@@ -36,13 +38,16 @@ const Login = () => {
       );
 
       if (loginUser.fulfilled.match(resultAction)) {
+        setIsLoading(false)
         toast.success("Login successful!");
         navigate("/");
       } else {
         console.log(resultAction)
+        setIsLoading(false)
         toast.error(resultAction?.payload?.error || "Login failed");
       }
     } catch (error) {
+      setIsLoading(false)
       toast.error("Failed to login");
       console.log(error);
     }
@@ -108,9 +113,10 @@ const Login = () => {
 
             <button
               type="submit"
+              disabled={isLoading}
               className="bg-primary flex items-center justify-center gap-2 text-white font-semibold text-lg rounded-full w-full py-3 hover:bg-[#75244b]"
             >
-              Log In
+              Log In {isLoading && <Loader className={isLoading && "animate-spin"} />}
             </button>
           </form>
 
