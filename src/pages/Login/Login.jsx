@@ -23,6 +23,8 @@ const Login = () => {
     setRecaptchaToken(value || "");
   }
 
+  console.log("recaptchaToken", recaptchaToken)
+
   const onSubmit = async (data) => {
     try {
       const resultAction = await dispatch(
@@ -94,7 +96,7 @@ const Login = () => {
             </div>
 
             <ReCAPTCHA
-              sitekey="6LchN7gqAAAAAN1x37YAX0nhMkvuta3w_0ZiRElH"
+              sitekey="6LdqceUqAAAAAFzkEhr1pcFw2mhZZK67SizdJyax"
               onChange={onChange}
             />
 
