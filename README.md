@@ -141,6 +141,9 @@ To prevent bot attacks, I implemented Google reCAPTCHA on the login page, ensuri
 
 ## Deployment
 ### Live URL (Optional)
-couldn't be able to provide a live URL
-but here is the video link for the overview of this project
+[https://task-management-client-chi-nine.vercel.app/]
+
+---
+
+here is the video link for the overview of this project
 [https://drive.google.com/file/d/1il722hlrHCU_nciBs1Sysk5goc0VQL9Y/view?usp=sharing]
