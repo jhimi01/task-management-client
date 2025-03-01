@@ -363,7 +363,7 @@ export default function Dashboard() {
             xs: 1,
             md: 6,
           },
-          backgroundColor: "#fcfeff",
+          backgroundColor: "#f5f7f7",
         }}
       >
         <DrawerHeader />
